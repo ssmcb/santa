@@ -3,10 +3,11 @@
 import React from 'react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { Globe } from 'lucide-react';
 
 const languages = [
-  { code: 'en', label: 'EN', flag: '🇺🇸' },
-  { code: 'pt', label: 'PT', flag: '🇧🇷' },
+  { code: 'en', label: 'EN' },
+  { code: 'pt', label: 'PT' },
 ] as const;
 
 export const LanguageSwitcher = React.memo(() => {
@@ -37,10 +38,10 @@ export const LanguageSwitcher = React.memo(() => {
           variant={currentLocale === lang.code ? 'default' : 'ghost'}
           size="sm"
           onClick={() => switchLanguage(lang.code)}
-          className="gap-1"
+          className="gap-1.5"
         >
-          <span>{lang.flag}</span>
-          <span className="text-xs">{lang.label}</span>
+          {currentLocale === lang.code && <Globe className="w-3.5 h-3.5" />}
+          <span className="text-xs font-semibold">{lang.label}</span>
         </Button>
       ))}
     </div>

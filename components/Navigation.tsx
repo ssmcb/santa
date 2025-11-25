@@ -6,6 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { Candy } from 'lucide-react';
 
 type NavigationProps = {
   isLoggedIn: boolean;
@@ -43,7 +44,7 @@ export const Navigation = React.memo(({ isLoggedIn }: NavigationProps) => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href={`/${locale}`} className="flex items-center gap-2">
-            <span className="text-2xl">🎅</span>
+            <Candy className="w-7 h-7 text-zinc-900 dark:text-zinc-50" />
             <span className="font-bold text-xl text-zinc-900 dark:text-zinc-50">Secret Santa</span>
           </Link>
 

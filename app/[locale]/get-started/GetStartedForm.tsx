@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Candy } from 'lucide-react';
 
 const getStartedSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -69,7 +70,10 @@ export const GetStartedForm = React.memo(({ locale }: GetStartedFormProps) => {
   return (
     <Card className="w-full max-w-md">
       <CardHeader>
-        <CardTitle className="text-2xl">🎅 {t('getStarted')}</CardTitle>
+        <CardTitle className="text-2xl flex items-center gap-2">
+          <Candy className="w-7 h-7" />
+          {t('getStarted')}
+        </CardTitle>
         <CardDescription>{t('getStartedDescription')}</CardDescription>
       </CardHeader>
       <CardContent>

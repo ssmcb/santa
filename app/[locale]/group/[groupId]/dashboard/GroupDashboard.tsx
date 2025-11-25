@@ -18,6 +18,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { Calendar, MapPin, DollarSign, Gift, Candy } from 'lucide-react';
 
 type Group = {
   id: string;
@@ -178,12 +179,15 @@ export const GroupDashboard = React.memo(
           {/* Header */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-3xl mb-4">🎅 {group.name}</CardTitle>
+              <CardTitle className="text-3xl mb-4 flex items-center gap-2">
+                <Candy className="w-8 h-8" />
+                {group.name}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="flex items-center gap-3 p-3 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
-                  <div className="text-2xl">📅</div>
+                  <Calendar className="w-6 h-6 text-zinc-600 dark:text-zinc-400" />
                   <div>
                     <p className="text-xs text-zinc-500 dark:text-zinc-400 uppercase font-semibold">
                       {tCommon('date')}
@@ -194,7 +198,7 @@ export const GroupDashboard = React.memo(
                   </div>
                 </div>
                 <div className="flex items-center gap-3 p-3 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
-                  <div className="text-2xl">📍</div>
+                  <MapPin className="w-6 h-6 text-zinc-600 dark:text-zinc-400" />
                   <div>
                     <p className="text-xs text-zinc-500 dark:text-zinc-400 uppercase font-semibold">
                       {tCommon('location')}
@@ -203,7 +207,7 @@ export const GroupDashboard = React.memo(
                   </div>
                 </div>
                 <div className="flex items-center gap-3 p-3 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
-                  <div className="text-2xl">💰</div>
+                  <DollarSign className="w-6 h-6 text-zinc-600 dark:text-zinc-400" />
                   <div>
                     <p className="text-xs text-zinc-500 dark:text-zinc-400 uppercase font-semibold">
                       {tCommon('budget')}
@@ -222,7 +226,10 @@ export const GroupDashboard = React.memo(
                 <CardTitle>{tLottery('yourSecretSanta')}</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold">🎁 {myRecipient.name}</p>
+                <p className="text-2xl font-bold flex items-center gap-2">
+                  <Gift className="w-8 h-8" />
+                  {myRecipient.name}
+                </p>
               </CardContent>
             </Card>
           )}

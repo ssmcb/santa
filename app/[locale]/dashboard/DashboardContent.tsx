@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { MapPin, DollarSign, Users, Gift, Candy } from 'lucide-react';
 
 type Group = {
   id: string;
@@ -34,8 +35,9 @@ export const DashboardContent = React.memo(
           {/* Header */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">
-                Welcome, {participantName}! 🎅
+              <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50 flex items-center gap-2">
+                <Candy className="w-8 h-8" />
+                Welcome, {participantName}!
               </h1>
               <p className="text-zinc-600 dark:text-zinc-400 mt-1">
                 {groups.length === 0
@@ -81,15 +83,15 @@ export const DashboardContent = React.memo(
                       </CardHeader>
                       <CardContent className="space-y-2">
                         <div className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
-                          <span>📍</span>
+                          <MapPin className="w-4 h-4" />
                           <span>{group.place}</span>
                         </div>
                         <div className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
-                          <span>💰</span>
+                          <DollarSign className="w-4 h-4" />
                           <span>{group.budget}</span>
                         </div>
                         <div className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
-                          <span>👥</span>
+                          <Users className="w-4 h-4" />
                           <span>
                             {group.participantCount}{' '}
                             {group.participantCount === 1
@@ -106,7 +108,9 @@ export const DashboardContent = React.memo(
           ) : (
             <Card>
               <CardContent className="p-8 text-center space-y-4">
-                <div className="text-6xl">🎁</div>
+                <div className="flex justify-center">
+                  <Gift className="w-16 h-16 text-zinc-400 dark:text-zinc-600" />
+                </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">{t('create')}</h3>
                   <p className="text-zinc-600 dark:text-zinc-400 mb-4">{t('createGroupCTA')}</p>

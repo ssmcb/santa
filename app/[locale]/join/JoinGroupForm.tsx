@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Gift, Calendar, MapPin, DollarSign } from 'lucide-react';
 
 const joinGroupSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -79,7 +80,10 @@ export const JoinGroupForm = React.memo(
     return (
       <Card className="w-full max-w-2xl">
         <CardHeader>
-          <CardTitle className="text-2xl">🎁 {t('join')}</CardTitle>
+          <CardTitle className="text-2xl flex items-center gap-2">
+            <Gift className="w-7 h-7" />
+            {t('join')}
+          </CardTitle>
           <CardDescription>{tCommon('joinInviteDescription')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -87,14 +91,17 @@ export const JoinGroupForm = React.memo(
           <div className="p-4 bg-zinc-100 dark:bg-zinc-900 rounded-lg space-y-2">
             <h3 className="font-semibold text-lg">{groupName}</h3>
             <div className="text-sm text-zinc-600 dark:text-zinc-400 space-y-1">
-              <p>
-                📅 {tAuth('date')}: {groupDate}
+              <p className="flex items-center gap-2">
+                <Calendar className="w-4 h-4" />
+                {tAuth('date')}: {groupDate}
               </p>
-              <p>
-                📍 {tAuth('location')}: {groupPlace}
+              <p className="flex items-center gap-2">
+                <MapPin className="w-4 h-4" />
+                {tAuth('location')}: {groupPlace}
               </p>
-              <p>
-                💰 {tCommon('budget')}: {groupBudget}
+              <p className="flex items-center gap-2">
+                <DollarSign className="w-4 h-4" />
+                {tCommon('budget')}: {groupBudget}
               </p>
             </div>
           </div>
