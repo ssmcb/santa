@@ -9,6 +9,7 @@ import { z } from 'zod';
 const sendInvitationSchema = z.object({
   groupId: z.string(),
   recipientEmail: z.string().email(),
+  locale: z.string().optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -20,7 +21,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { groupId, recipientEmail } = sendInvitationSchema.parse(body);
+    const { groupId, recipientEmail, locale: requestLocale } = sendInvitationSchema.parse(body);
 
     await connectDB();
 
@@ -53,8 +54,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invitation already sent to this email' }, { status: 400 });
     }
 
-    // Get locale from Accept-Language header
-    const locale = request.headers.get('accept-language')?.startsWith('pt') ? 'pt' : 'en';
+    // Use locale from request body, fallback to Accept-Language header
+    const locale = requestLocale || (request.headers.get('accept-language')?.startsWith('pt') ? 'pt' : 'en');
 
     // Get app URL
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';

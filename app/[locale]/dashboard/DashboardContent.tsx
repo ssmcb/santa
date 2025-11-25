@@ -27,7 +27,6 @@ type DashboardContentProps = {
 export const DashboardContent = React.memo(
   ({ locale, participantName, groups }: DashboardContentProps) => {
     const t = useTranslations('groups');
-    const tCommon = useTranslations('common');
 
     return (
       <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-4 md:p-8">

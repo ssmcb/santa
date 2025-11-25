@@ -10,6 +10,7 @@ import { z } from 'zod';
 
 const runLotterySchema = z.object({
   groupId: z.string(),
+  locale: z.string().optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -21,7 +22,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { groupId } = runLotterySchema.parse(body);
+    const { groupId, locale: requestLocale } = runLotterySchema.parse(body);
 
     await connectDB();
 
@@ -101,8 +102,8 @@ export async function POST(request: NextRequest) {
     group.is_drawn = true;
     await group.save();
 
-    // Get locale from Accept-Language header
-    const locale = request.headers.get('accept-language')?.startsWith('pt') ? 'pt' : 'en';
+    // Use locale from request body, fallback to Accept-Language header
+    const locale = requestLocale || (request.headers.get('accept-language')?.startsWith('pt') ? 'pt' : 'en');
 
     // Send assignment emails to all participants
     const emailPromises: Promise<

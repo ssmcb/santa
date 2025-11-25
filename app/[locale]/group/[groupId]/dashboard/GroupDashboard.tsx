@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 
 type Group = {
   id: string;
@@ -97,6 +98,7 @@ export const GroupDashboard = React.memo(
           body: JSON.stringify({
             groupId: group.id,
             recipientEmail: inviteEmail,
+            locale,
           }),
         });
 
@@ -114,7 +116,7 @@ export const GroupDashboard = React.memo(
       } finally {
         setIsSendingInvite(false);
       }
-    }, [inviteEmail, group.id, router, t, tCommon]);
+    }, [inviteEmail, group.id, locale, router, t, tCommon]);
 
     const handleRunLottery = useCallback(async () => {
       setIsRunningLottery(true);
@@ -125,7 +127,7 @@ export const GroupDashboard = React.memo(
         const response = await fetch('/api/lottery/run', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ groupId: group.id }),
+          body: JSON.stringify({ groupId: group.id, locale }),
         });
 
         const result = await response.json();
@@ -141,7 +143,7 @@ export const GroupDashboard = React.memo(
       } finally {
         setIsRunningLottery(false);
       }
-    }, [group.id, router, tLottery, tCommon]);
+    }, [group.id, locale, router, tLottery, tCommon]);
 
     const getStatusBadge = useCallback(
       (status: string) => {
@@ -165,6 +167,14 @@ export const GroupDashboard = React.memo(
     return (
       <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-4 md:p-8">
         <div className="max-w-6xl mx-auto space-y-6">
+          {/* Breadcrumbs */}
+          <Breadcrumbs
+            items={[
+              { label: tCommon('dashboard'), href: `/${locale}/dashboard` },
+              { label: group.name },
+            ]}
+          />
+
           {/* Header */}
           <Card>
             <CardHeader>
