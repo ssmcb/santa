@@ -1,0 +1,54 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success"
+  },
+  "auth": {
+    "getStarted": "Get Started",
+    "email": "Email",
+    "name": "Name",
+    "verificationCode": "Verification Code",
+    "verify": "Verify",
+    "resendCode": "Resend Code",
+    "emailSent": "Verification email sent",
+    "invalidCode": "Invalid or expired verification code",
+    "resendIn": "Resend in {seconds}s"
+  },
+  "groups": {
+    "create": "Create Group",
+    "name": "Group Name",
+    "date": "Event Date",
+    "place": "Event Location",
+    "budget": "Gift Budget",
+    "inviteLink": "Invitation Link",
+    "copyLink": "Copy Link",
+    "shareWhatsApp": "Share on WhatsApp",
+    "sendInvitation": "Send Invitation",
+    "participants": "Participants",
+    "runLottery": "Run Lottery",
+    "invitationsSent": "Invitations Sent"
+  },
+  "participants": {
+    "name": "Name",
+    "email": "Email",
+    "status": "Status",
+    "pending": "Pending",
+    "joined": "Joined",
+    "emailDeliveryStatus": "Email Status",
+    "delivered": "Delivered",
+    "sent": "Sent",
+    "bounced": "Bounced",
+    "failed": "Failed"
+  },
+  "lottery": {
+    "run": "Run Lottery",
+    "reveal": "Reveal Assignment",
+    "yourSecretSanta": "Your Secret Santa is:",
+    "lotteryComplete": "Lottery completed successfully",
+    "assignmentEmailSent": "Assignment emails sent to all participants"
+  }
+}

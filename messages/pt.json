@@ -1,0 +1,54 @@
+{
+  "common": {
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "continue": "Continuar",
+    "loading": "Carregando...",
+    "error": "Ocorreu um erro",
+    "success": "Sucesso"
+  },
+  "auth": {
+    "getStarted": "Começar",
+    "email": "E-mail",
+    "name": "Nome",
+    "verificationCode": "Código de Verificação",
+    "verify": "Verificar",
+    "resendCode": "Reenviar Código",
+    "emailSent": "E-mail de verificação enviado",
+    "invalidCode": "Código de verificação inválido ou expirado",
+    "resendIn": "Reenviar em {seconds}s"
+  },
+  "groups": {
+    "create": "Criar Grupo",
+    "name": "Nome do Grupo",
+    "date": "Data do Evento",
+    "place": "Local do Evento",
+    "budget": "Orçamento do Presente",
+    "inviteLink": "Link de Convite",
+    "copyLink": "Copiar Link",
+    "shareWhatsApp": "Compartilhar no WhatsApp",
+    "sendInvitation": "Enviar Convite",
+    "participants": "Participantes",
+    "runLottery": "Realizar Sorteio",
+    "invitationsSent": "Convites Enviados"
+  },
+  "participants": {
+    "name": "Nome",
+    "email": "E-mail",
+    "status": "Status",
+    "pending": "Pendente",
+    "joined": "Entrou",
+    "emailDeliveryStatus": "Status do E-mail",
+    "delivered": "Entregue",
+    "sent": "Enviado",
+    "bounced": "Rejeitado",
+    "failed": "Falhou"
+  },
+  "lottery": {
+    "run": "Realizar Sorteio",
+    "reveal": "Revelar Atribuição",
+    "yourSecretSanta": "Seu Amigo Secreto é:",
+    "lotteryComplete": "Sorteio concluído com sucesso",
+    "assignmentEmailSent": "E-mails de atribuição enviados a todos os participantes"
+  }
+}
