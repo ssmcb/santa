@@ -10,7 +10,9 @@
     "appTitle": "Secret Santa",
     "homeDescription": "Organize your Secret Santa gift exchange with ease. Create groups, invite participants, and let us handle the rest!",
     "joinInviteDescription": "You've been invited to join a Secret Santa group!",
-    "budget": "Budget"
+    "budget": "Budget",
+    "date": "Date",
+    "location": "Location"
   },
   "auth": {
     "getStarted": "Get Started",

@@ -10,7 +10,9 @@
     "appTitle": "Amigo Secreto",
     "homeDescription": "Organize sua troca de presentes de Amigo Secreto com facilidade. Crie grupos, convide participantes e deixe o resto conosco!",
     "joinInviteDescription": "Você foi convidado para entrar em um grupo de Amigo Secreto!",
-    "budget": "Orçamento"
+    "budget": "Orçamento",
+    "date": "Data",
+    "location": "Local"
   },
   "auth": {
     "getStarted": "Começar",

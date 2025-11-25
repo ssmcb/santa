@@ -178,11 +178,41 @@ export const GroupDashboard = React.memo(
           {/* Header */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-3xl">🎅 {group.name}</CardTitle>
-              <CardDescription>
-                {new Date(group.date).toLocaleDateString()} • {group.place} • Budget: {group.budget}
-              </CardDescription>
+              <CardTitle className="text-3xl mb-4">🎅 {group.name}</CardTitle>
             </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="flex items-center gap-3 p-3 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
+                  <div className="text-2xl">📅</div>
+                  <div>
+                    <p className="text-xs text-zinc-500 dark:text-zinc-400 uppercase font-semibold">
+                      {tCommon('date')}
+                    </p>
+                    <p className="text-sm font-medium">
+                      {new Date(group.date).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-3 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
+                  <div className="text-2xl">📍</div>
+                  <div>
+                    <p className="text-xs text-zinc-500 dark:text-zinc-400 uppercase font-semibold">
+                      {tCommon('location')}
+                    </p>
+                    <p className="text-sm font-medium">{group.place}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-3 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
+                  <div className="text-2xl">💰</div>
+                  <div>
+                    <p className="text-xs text-zinc-500 dark:text-zinc-400 uppercase font-semibold">
+                      {tCommon('budget')}
+                    </p>
+                    <p className="text-sm font-medium">{group.budget}</p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
           </Card>
 
           {/* Show assignment if lottery has been drawn and user is not owner viewing */}
