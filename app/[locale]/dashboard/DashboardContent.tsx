@@ -33,13 +33,13 @@ export const DashboardContent = React.memo(
       <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-4 md:p-8">
         <div className="max-w-6xl mx-auto space-y-6">
           {/* Header */}
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50 flex items-center gap-2">
-                <Gift className="w-8 h-8" />
+              <h1 className="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-zinc-50 flex items-center gap-2">
+                <Gift className="w-6 h-6 md:w-8 md:h-8" />
                 Welcome, {participantName}!
               </h1>
-              <p className="text-zinc-600 dark:text-zinc-400 mt-1">
+              <p className="text-sm md:text-base text-zinc-600 dark:text-zinc-400 mt-1">
                 {groups.length === 0
                   ? t('createFirstGroup')
                   : t('youHaveGroups', {
@@ -48,8 +48,10 @@ export const DashboardContent = React.memo(
                     })}
               </p>
             </div>
-            <Link href={`/${locale}/group/create`}>
-              <Button size="lg">{t('create')}</Button>
+            <Link href={`/${locale}/group/create`} className="w-full md:w-auto">
+              <Button size="lg" className="w-full md:w-auto">
+                {t('create')}
+              </Button>
             </Link>
           </div>
 

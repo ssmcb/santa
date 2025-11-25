@@ -293,14 +293,14 @@ export const GroupDashboard = React.memo(
           {/* Header */}
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-3xl mb-4 flex items-center gap-2">
-                  <Gift className="w-8 h-8" />
+              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <CardTitle className="text-2xl md:text-3xl flex items-center gap-2">
+                  <Gift className="w-6 h-6 md:w-8 md:h-8" />
                   {isEditingGroup ? (
                     <Input
                       value={editedGroup.name}
                       onChange={(e) => setEditedGroup({ ...editedGroup, name: e.target.value })}
-                      className="text-3xl font-bold h-auto py-1"
+                      className="text-2xl md:text-3xl font-bold h-auto py-1"
                       disabled={isSavingGroup}
                     />
                   ) : (
@@ -308,25 +308,39 @@ export const GroupDashboard = React.memo(
                   )}
                 </CardTitle>
                 {isOwner && !isEditingGroup && (
-                  <Button variant="outline" size="sm" onClick={() => setIsEditingGroup(true)}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setIsEditingGroup(true)}
+                    className="w-full md:w-auto"
+                  >
                     <Pencil className="w-4 h-4 mr-2" />
                     {t('edit')}
                   </Button>
                 )}
                 {isOwner && isEditingGroup && (
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 w-full md:w-auto">
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={handleCancelEdit}
                       disabled={isSavingGroup}
+                      className="flex-1 md:flex-none"
                     >
-                      <X className="w-4 h-4 mr-2" />
-                      {tCommon('cancel')}
+                      <X className="w-4 h-4 md:mr-2" />
+                      <span className="hidden md:inline">{tCommon('cancel')}</span>
                     </Button>
-                    <Button size="sm" onClick={handleSaveGroup} disabled={isSavingGroup}>
-                      <Save className="w-4 h-4 mr-2" />
-                      {isSavingGroup ? tCommon('loading') : tCommon('save')}
+                    <Button
+                      size="sm"
+                      onClick={handleSaveGroup}
+                      disabled={isSavingGroup}
+                      className="flex-1 md:flex-none"
+                    >
+                      <Save className="w-4 h-4 md:mr-2" />
+                      <span className="hidden md:inline">
+                        {isSavingGroup ? tCommon('loading') : tCommon('save')}
+                      </span>
+                      <span className="md:hidden">{isSavingGroup ? '...' : 'Save'}</span>
                     </Button>
                   </div>
                 )}
@@ -491,7 +505,7 @@ export const GroupDashboard = React.memo(
               {/* Participants Section */}
               <Card>
                 <CardHeader>
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                     <div>
                       <CardTitle>
                         {t('participants')} ({participants.length})
@@ -499,56 +513,64 @@ export const GroupDashboard = React.memo(
                       <CardDescription>{t('manageParticipants')}</CardDescription>
                     </div>
                     {!group.isDrawn && participants.length >= 3 && (
-                      <Button onClick={handleRunLottery} disabled={isRunningLottery}>
+                      <Button
+                        onClick={handleRunLottery}
+                        disabled={isRunningLottery}
+                        className="w-full md:w-auto"
+                      >
                         {isRunningLottery ? tCommon('loading') : t('runLottery')}
                       </Button>
                     )}
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>{tParticipants('name')}</TableHead>
-                        <TableHead>{tParticipants('email')}</TableHead>
-                        {group.isDrawn && (
-                          <TableHead>{tParticipants('emailDeliveryStatus')}</TableHead>
-                        )}
-                        {!group.isDrawn && <TableHead className="w-20"></TableHead>}
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {participants.map((participant) => (
-                        <TableRow key={participant.id}>
-                          <TableCell className="font-medium">{participant.name}</TableCell>
-                          <TableCell>{participant.email}</TableCell>
-                          {group.isDrawn && (
-                            <TableCell>
-                              {getStatusBadge(participant.assignmentEmailStatus)}
-                            </TableCell>
-                          )}
-                          {!group.isDrawn && (
-                            <TableCell>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => handleRemoveParticipant(participant.id)}
-                                disabled={participant.email === currentParticipant.email}
-                                className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950"
-                                title={
-                                  participant.email === currentParticipant.email
-                                    ? 'Cannot remove yourself'
-                                    : t('removeParticipant')
-                                }
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            </TableCell>
-                          )}
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                  <div className="overflow-x-auto -mx-6 md:mx-0">
+                    <div className="inline-block min-w-full align-middle">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>{tParticipants('name')}</TableHead>
+                            <TableHead>{tParticipants('email')}</TableHead>
+                            {group.isDrawn && (
+                              <TableHead>{tParticipants('emailDeliveryStatus')}</TableHead>
+                            )}
+                            {!group.isDrawn && <TableHead className="w-20"></TableHead>}
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {participants.map((participant) => (
+                            <TableRow key={participant.id}>
+                              <TableCell className="font-medium">{participant.name}</TableCell>
+                              <TableCell>{participant.email}</TableCell>
+                              {group.isDrawn && (
+                                <TableCell>
+                                  {getStatusBadge(participant.assignmentEmailStatus)}
+                                </TableCell>
+                              )}
+                              {!group.isDrawn && (
+                                <TableCell>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleRemoveParticipant(participant.id)}
+                                    disabled={participant.email === currentParticipant.email}
+                                    className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950"
+                                    title={
+                                      participant.email === currentParticipant.email
+                                        ? 'Cannot remove yourself'
+                                        : t('removeParticipant')
+                                    }
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </Button>
+                                </TableCell>
+                              )}
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  </div>
 
                   {participants.length < 3 && (
                     <p className="text-sm text-zinc-500 mt-4">{t('minParticipants')}</p>

@@ -44,23 +44,28 @@ export const Navigation = memo(({ isLoggedIn }: NavigationProps) => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href={`/${locale}`} className="flex items-center gap-2">
-            <Gift className="w-7 h-7 text-zinc-900 dark:text-zinc-50" />
-            <span className="font-bold text-xl text-zinc-900 dark:text-zinc-50">Secret Santa</span>
+            <Gift className="w-6 h-6 md:w-7 md:h-7 text-zinc-900 dark:text-zinc-50" />
+            <span className="font-bold text-lg md:text-xl text-zinc-900 dark:text-zinc-50">
+              Secret Santa
+            </span>
           </Link>
 
           {/* Right side */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
             <LanguageSwitcher />
 
             {isLoggedIn ? (
               <>
-                <Link href={`/${locale}/dashboard`}>
+                <Link href={`/${locale}/dashboard`} className="hidden sm:block">
                   <Button variant="ghost" size="sm">
                     {t('dashboard')}
                   </Button>
                 </Link>
                 <Button variant="ghost" size="sm" onClick={handleSignOut} disabled={isSigningOut}>
-                  {isSigningOut ? t('loading') : tAuth('signOut')}
+                  <span className="hidden sm:inline">
+                    {isSigningOut ? t('loading') : tAuth('signOut')}
+                  </span>
+                  <span className="sm:hidden">{isSigningOut ? '...' : 'Out'}</span>
                 </Button>
               </>
             ) : (
