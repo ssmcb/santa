@@ -27,8 +27,8 @@ export function getVerificationEmailTemplate({
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
           .header { background-color: #18181b; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
           .content { background-color: #f9fafb; padding: 30px; border-radius: 0 0 8px 8px; }
-          .code { font-size: 32px; font-weight: bold; letter-spacing: 8px; text-align: center; padding: 20px; background-color: white; border-radius: 8px; margin: 20px 0; }
-          .button { display: inline-block; padding: 12px 24px; background-color: #18181b; color: white; text-decoration: none; border-radius: 6px; margin: 20px 0; }
+          .code { font-size: 32px; font-weight: bold; letter-spacing: 8px; text-align: center; padding: 20px; background-color: white; border-radius: 8px; margin: 20px 0; color: #18181b; }
+          .button { display: inline-block; padding: 14px 32px; background-color: #16a34a !important; color: #ffffff !important; text-decoration: none; border-radius: 6px; margin: 20px 0; font-weight: 600; font-size: 16px; }
           .footer { text-align: center; margin-top: 20px; color: #666; font-size: 14px; }
         </style>
       </head>
@@ -42,19 +42,19 @@ export function getVerificationEmailTemplate({
             <p>
               ${
                 isPortuguese
-                  ? 'Obrigado por se registrar no Secret Santa. Use o código abaixo para verificar seu e-mail:'
-                  : 'Thank you for signing up for Secret Santa. Use the code below to verify your email:'
+                  ? 'Obrigado por se registrar no Secret Santa. Clique no botão abaixo para verificar seu e-mail:'
+                  : 'Thank you for signing up for Secret Santa. Click the button below to verify your email:'
               }
             </p>
-            <div class="code">${verificationCode}</div>
             <p style="text-align: center;">
-              ${isPortuguese ? 'Ou clique no botão abaixo:' : 'Or click the button below:'}
-            </p>
-            <p style="text-align: center;">
-              <a href="${verificationUrl}" class="button">
+              <a href="${verificationUrl}" class="button" style="display: inline-block; padding: 14px 32px; background-color: #16a34a; color: #ffffff; text-decoration: none; border-radius: 6px; margin: 20px 0; font-weight: 600; font-size: 16px;">
                 ${isPortuguese ? 'Verificar E-mail' : 'Verify Email'}
               </a>
             </p>
+            <p style="text-align: center;">
+              ${isPortuguese ? 'Ou digite o código abaixo:' : 'Or enter the code below:'}
+            </p>
+            <div class="code">${verificationCode}</div>
             <p>
               ${
                 isPortuguese
@@ -83,9 +83,10 @@ ${isPortuguese ? `Olá, ${name}!` : `Hello, ${name}!`}
 
 ${isPortuguese ? 'Obrigado por se registrar no Secret Santa.' : 'Thank you for signing up for Secret Santa.'}
 
-${isPortuguese ? 'Seu código de verificação é:' : 'Your verification code is:'} ${verificationCode}
+${isPortuguese ? 'Clique no link abaixo para verificar seu e-mail:' : 'Click the link below to verify your email:'}
+${verificationUrl}
 
-${isPortuguese ? 'Ou acesse este link:' : 'Or visit this link:'} ${verificationUrl}
+${isPortuguese ? 'Ou digite o código de verificação:' : 'Or enter the verification code:'} ${verificationCode}
 
 ${isPortuguese ? 'Este código expira em 30 minutos.' : 'This code expires in 30 minutes.'}
 
