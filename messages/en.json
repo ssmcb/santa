@@ -20,6 +20,7 @@
   },
   "groups": {
     "create": "Create Group",
+    "join": "Join Group",
     "name": "Group Name",
     "date": "Event Date",
     "place": "Event Location",
