@@ -70,7 +70,7 @@ export const GetStartedForm = React.memo(({ locale }: GetStartedFormProps) => {
     <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle className="text-2xl">🎅 {t('getStarted')}</CardTitle>
-        <CardDescription>Create your Secret Santa account to get started</CardDescription>
+        <CardDescription>{t('getStartedDescription')}</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

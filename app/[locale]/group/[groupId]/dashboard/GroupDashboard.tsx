@@ -76,12 +76,12 @@ export const GroupDashboard = React.memo(
     const handleCopyLink = useCallback(async () => {
       try {
         await navigator.clipboard.writeText(inviteLink);
-        setSuccess('Link copied to clipboard!');
+        setSuccess(t('linkCopied'));
         setTimeout(() => setSuccess(null), 3000);
       } catch {
-        setError('Failed to copy link');
+        setError(t('linkCopyFailed'));
       }
-    }, [inviteLink]);
+    }, [inviteLink, t]);
 
     const handleSendInvite = useCallback(async () => {
       if (!inviteEmail) return;
@@ -106,7 +106,7 @@ export const GroupDashboard = React.memo(
           throw new Error(result.error || 'Failed to send invitation');
         }
 
-        setSuccess('Invitation sent successfully!');
+        setSuccess(t('invitationSentSuccess'));
         setInviteEmail('');
         router.refresh();
       } catch (err) {
@@ -114,7 +114,7 @@ export const GroupDashboard = React.memo(
       } finally {
         setIsSendingInvite(false);
       }
-    }, [inviteEmail, group.id, router, tCommon]);
+    }, [inviteEmail, group.id, router, t, tCommon]);
 
     const handleRunLottery = useCallback(async () => {
       setIsRunningLottery(true);
@@ -194,7 +194,7 @@ export const GroupDashboard = React.memo(
               <Card>
                 <CardHeader>
                   <CardTitle>{t('inviteLink')}</CardTitle>
-                  <CardDescription>Share this link with participants</CardDescription>
+                  <CardDescription>{t('shareInviteLink')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex gap-2">
@@ -250,7 +250,7 @@ export const GroupDashboard = React.memo(
                       <CardTitle>
                         {t('participants')} ({participants.length})
                       </CardTitle>
-                      <CardDescription>Manage your Secret Santa participants</CardDescription>
+                      <CardDescription>{t('manageParticipants')}</CardDescription>
                     </div>
                     {!group.isDrawn && participants.length >= 3 && (
                       <Button onClick={handleRunLottery} disabled={isRunningLottery}>
@@ -286,9 +286,7 @@ export const GroupDashboard = React.memo(
                   </Table>
 
                   {participants.length < 3 && (
-                    <p className="text-sm text-zinc-500 mt-4">
-                      You need at least 3 participants to run the lottery
-                    </p>
+                    <p className="text-sm text-zinc-500 mt-4">{t('minParticipants')}</p>
                   )}
                 </CardContent>
               </Card>

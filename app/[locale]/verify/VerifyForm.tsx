@@ -146,7 +146,7 @@ export const VerifyForm = React.memo(({ locale, initialEmail, initialCode }: Ver
     <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle className="text-2xl">📧 {t('verify')}</CardTitle>
-        <CardDescription>Enter the verification code sent to your email</CardDescription>
+        <CardDescription>{t('verifyDescription')}</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -160,9 +160,7 @@ export const VerifyForm = React.memo(({ locale, initialEmail, initialCode }: Ver
               disabled={isSubmitting}
             />
             {errors.email && <p className="text-sm text-red-600">{errors.email.message}</p>}
-            <p className="text-xs text-zinc-500">
-              You can edit your email if it was entered incorrectly
-            </p>
+            <p className="text-xs text-zinc-500">{t('emailEditNote')}</p>
           </div>
 
           <div className="space-y-2">

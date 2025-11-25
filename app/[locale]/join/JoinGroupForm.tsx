@@ -80,16 +80,22 @@ export const JoinGroupForm = React.memo(
       <Card className="w-full max-w-2xl">
         <CardHeader>
           <CardTitle className="text-2xl">🎁 {t('join')}</CardTitle>
-          <CardDescription>You&apos;ve been invited to join a Secret Santa group!</CardDescription>
+          <CardDescription>{tCommon('joinInviteDescription')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Group Info */}
           <div className="p-4 bg-zinc-100 dark:bg-zinc-900 rounded-lg space-y-2">
             <h3 className="font-semibold text-lg">{groupName}</h3>
             <div className="text-sm text-zinc-600 dark:text-zinc-400 space-y-1">
-              <p>📅 Date: {groupDate}</p>
-              <p>📍 Location: {groupPlace}</p>
-              <p>💰 Budget: {groupBudget}</p>
+              <p>
+                📅 {tAuth('date')}: {groupDate}
+              </p>
+              <p>
+                📍 {tAuth('location')}: {groupPlace}
+              </p>
+              <p>
+                💰 {tCommon('budget')}: {groupBudget}
+              </p>
             </div>
           </div>
 

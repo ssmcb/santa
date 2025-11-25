@@ -6,7 +6,11 @@
     "loading": "Loading...",
     "error": "An error occurred",
     "success": "Success",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "appTitle": "Secret Santa",
+    "homeDescription": "Organize your Secret Santa gift exchange with ease. Create groups, invite participants, and let us handle the rest!",
+    "joinInviteDescription": "You've been invited to join a Secret Santa group!",
+    "budget": "Budget"
   },
   "auth": {
     "getStarted": "Get Started",
@@ -18,7 +22,12 @@
     "emailSent": "Verification email sent",
     "invalidCode": "Invalid or expired verification code",
     "resendIn": "Resend in {seconds}s",
-    "signOut": "Sign Out"
+    "signOut": "Sign Out",
+    "getStartedDescription": "Create your Secret Santa account to get started",
+    "verifyDescription": "Enter the verification code sent to your email",
+    "emailEditNote": "You can edit your email if it was entered incorrectly",
+    "date": "Date",
+    "location": "Location"
   },
   "groups": {
     "create": "Create Group",
@@ -33,7 +42,23 @@
     "sendInvitation": "Send Invitation",
     "participants": "Participants",
     "runLottery": "Run Lottery",
-    "invitationsSent": "Invitations Sent"
+    "invitationsSent": "Invitations Sent",
+    "createDescription": "Set up your Secret Santa event details",
+    "shareInviteLink": "Share this link with participants",
+    "manageParticipants": "Manage your Secret Santa participants",
+    "minParticipants": "You need at least 3 participants to run the lottery",
+    "linkCopied": "Link copied to clipboard!",
+    "linkCopyFailed": "Failed to copy link",
+    "invitationSentSuccess": "Invitation sent successfully!",
+    "participant": "participant",
+    "participantPlural": "participants",
+    "group": "group",
+    "groupPlural": "groups",
+    "createFirstGroup": "Create your first Secret Santa group to get started",
+    "createGroupCTA": "Create a Secret Santa group, invite participants, and let the magic happen!",
+    "youHaveGroups": "You have {count} {groups}",
+    "owner": "Owner",
+    "drawn": "Drawn"
   },
   "participants": {
     "name": "Name",

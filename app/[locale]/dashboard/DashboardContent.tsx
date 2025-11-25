@@ -40,8 +40,11 @@ export const DashboardContent = React.memo(
               </h1>
               <p className="text-zinc-600 dark:text-zinc-400 mt-1">
                 {groups.length === 0
-                  ? 'Create your first Secret Santa group to get started'
-                  : `You have ${groups.length} group${groups.length > 1 ? 's' : ''}`}
+                  ? t('createFirstGroup')
+                  : t('youHaveGroups', {
+                      count: groups.length,
+                      groups: groups.length > 1 ? t('groupPlural') : t('group'),
+                    })}
               </p>
             </div>
             <Link href={`/${locale}/group/create`}>
@@ -63,12 +66,12 @@ export const DashboardContent = React.memo(
                           <div className="flex gap-1">
                             {group.isOwner && (
                               <Badge variant="default" className="text-xs">
-                                Owner
+                                {t('owner')}
                               </Badge>
                             )}
                             {group.isDrawn && (
                               <Badge variant="secondary" className="text-xs">
-                                Drawn
+                                {t('drawn')}
                               </Badge>
                             )}
                           </div>
@@ -90,7 +93,9 @@ export const DashboardContent = React.memo(
                           <span>👥</span>
                           <span>
                             {group.participantCount}{' '}
-                            {group.participantCount === 1 ? 'participant' : 'participants'}
+                            {group.participantCount === 1
+                              ? t('participant')
+                              : t('participantPlural')}
                           </span>
                         </div>
                       </CardContent>
@@ -105,9 +110,7 @@ export const DashboardContent = React.memo(
                 <div className="text-6xl">🎁</div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">{t('create')}</h3>
-                  <p className="text-zinc-600 dark:text-zinc-400 mb-4">
-                    Create a Secret Santa group, invite participants, and let the magic happen!
-                  </p>
+                  <p className="text-zinc-600 dark:text-zinc-400 mb-4">{t('createGroupCTA')}</p>
                   <Link href={`/${locale}/group/create`}>
                     <Button size="lg">{t('create')}</Button>
                   </Link>

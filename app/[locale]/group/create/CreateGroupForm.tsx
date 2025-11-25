@@ -76,7 +76,7 @@ export const CreateGroupForm = React.memo(({ locale, ownerEmail }: CreateGroupFo
     <Card className="w-full max-w-2xl">
       <CardHeader>
         <CardTitle className="text-2xl">🎅 {t('create')}</CardTitle>
-        <CardDescription>Set up your Secret Santa event details</CardDescription>
+        <CardDescription>{t('createDescription')}</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

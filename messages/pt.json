@@ -6,7 +6,11 @@
     "loading": "Carregando...",
     "error": "Ocorreu um erro",
     "success": "Sucesso",
-    "dashboard": "Painel"
+    "dashboard": "Painel",
+    "appTitle": "Amigo Secreto",
+    "homeDescription": "Organize sua troca de presentes de Amigo Secreto com facilidade. Crie grupos, convide participantes e deixe o resto conosco!",
+    "joinInviteDescription": "Você foi convidado para entrar em um grupo de Amigo Secreto!",
+    "budget": "Orçamento"
   },
   "auth": {
     "getStarted": "Começar",
@@ -18,7 +22,12 @@
     "emailSent": "E-mail de verificação enviado",
     "invalidCode": "Código de verificação inválido ou expirado",
     "resendIn": "Reenviar em {seconds}s",
-    "signOut": "Sair"
+    "signOut": "Sair",
+    "getStartedDescription": "Crie sua conta de Amigo Secreto para começar",
+    "verifyDescription": "Digite o código de verificação enviado para seu e-mail",
+    "emailEditNote": "Você pode editar seu e-mail se foi digitado incorretamente",
+    "date": "Data",
+    "location": "Local"
   },
   "groups": {
     "create": "Criar Grupo",
@@ -33,7 +42,23 @@
     "sendInvitation": "Enviar Convite",
     "participants": "Participantes",
     "runLottery": "Realizar Sorteio",
-    "invitationsSent": "Convites Enviados"
+    "invitationsSent": "Convites Enviados",
+    "createDescription": "Configure os detalhes do seu evento de Amigo Secreto",
+    "shareInviteLink": "Compartilhe este link com os participantes",
+    "manageParticipants": "Gerencie os participantes do seu Amigo Secreto",
+    "minParticipants": "Você precisa de pelo menos 3 participantes para realizar o sorteio",
+    "linkCopied": "Link copiado para a área de transferência!",
+    "linkCopyFailed": "Falha ao copiar o link",
+    "invitationSentSuccess": "Convite enviado com sucesso!",
+    "participant": "participante",
+    "participantPlural": "participantes",
+    "group": "grupo",
+    "groupPlural": "grupos",
+    "createFirstGroup": "Crie seu primeiro grupo de Amigo Secreto para começar",
+    "createGroupCTA": "Crie um grupo de Amigo Secreto, convide participantes e deixe a mágica acontecer!",
+    "youHaveGroups": "Você tem {count} {groups}",
+    "owner": "Proprietário",
+    "drawn": "Sorteado"
   },
   "participants": {
     "name": "Nome",
