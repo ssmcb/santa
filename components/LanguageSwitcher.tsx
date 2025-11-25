@@ -3,11 +3,17 @@
 import React from 'react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Globe } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Globe, Check } from 'lucide-react';
 
 const languages = [
-  { code: 'en', label: 'EN' },
-  { code: 'pt', label: 'PT' },
+  { code: 'en', label: 'English', short: 'EN' },
+  { code: 'pt', label: 'Português', short: 'PT' },
 ] as const;
 
 export const LanguageSwitcher = React.memo(() => {
@@ -30,21 +36,29 @@ export const LanguageSwitcher = React.memo(() => {
     router.push(newPathname);
   };
 
+  const currentLanguage = languages.find((lang) => lang.code === currentLocale);
+
   return (
-    <div className="flex gap-1">
-      {languages.map((lang) => (
-        <Button
-          key={lang.code}
-          variant={currentLocale === lang.code ? 'default' : 'ghost'}
-          size="sm"
-          onClick={() => switchLanguage(lang.code)}
-          className="gap-1.5"
-        >
-          {currentLocale === lang.code && <Globe className="w-3.5 h-3.5" />}
-          <span className="text-xs font-semibold">{lang.label}</span>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="sm" className="gap-2">
+          <Globe className="w-4 h-4" />
+          <span className="text-xs font-semibold">{currentLanguage?.short}</span>
         </Button>
-      ))}
-    </div>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {languages.map((lang) => (
+          <DropdownMenuItem
+            key={lang.code}
+            onClick={() => switchLanguage(lang.code)}
+            className="flex items-center justify-between gap-4 cursor-pointer"
+          >
+            <span>{lang.label}</span>
+            {currentLocale === lang.code && <Check className="w-4 h-4" />}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 });
 
