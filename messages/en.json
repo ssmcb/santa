@@ -5,7 +5,8 @@
     "continue": "Continue",
     "loading": "Loading...",
     "error": "An error occurred",
-    "success": "Success"
+    "success": "Success",
+    "dashboard": "Dashboard"
   },
   "auth": {
     "getStarted": "Get Started",
@@ -16,7 +17,8 @@
     "resendCode": "Resend Code",
     "emailSent": "Verification email sent",
     "invalidCode": "Invalid or expired verification code",
-    "resendIn": "Resend in {seconds}s"
+    "resendIn": "Resend in {seconds}s",
+    "signOut": "Sign Out"
   },
   "groups": {
     "create": "Create Group",
