@@ -103,7 +103,8 @@ export async function POST(request: NextRequest) {
     await group.save();
 
     // Use locale from request body, fallback to Accept-Language header
-    const locale = requestLocale || (request.headers.get('accept-language')?.startsWith('pt') ? 'pt' : 'en');
+    const locale =
+      requestLocale || (request.headers.get('accept-language')?.startsWith('pt') ? 'pt' : 'en');
 
     // Send assignment emails to all participants
     const emailPromises: Promise<

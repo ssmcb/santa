@@ -55,7 +55,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Use locale from request body, fallback to Accept-Language header
-    const locale = requestLocale || (request.headers.get('accept-language')?.startsWith('pt') ? 'pt' : 'en');
+    const locale =
+      requestLocale || (request.headers.get('accept-language')?.startsWith('pt') ? 'pt' : 'en');
 
     // Get app URL
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
