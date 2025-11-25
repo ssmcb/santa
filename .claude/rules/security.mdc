@@ -1,0 +1,72 @@
+---
+description: Security best practices for DDFlow - authentication, RLS policies, Stripe webhooks, and Supabase integration
+globs:
+  - "**/*.{ts,tsx}"
+  - "app/api/**/*"
+  - "middleware.ts"
+alwaysApply: true
+---
+
+# Security Standards (MANDATORY)
+
+## Authentication & Authorization
+
+- **Supabase Auth**: Use magic link authentication (passwordless)
+- **Session Management**: Server-side session validation using Supabase SSR
+- **Middleware Protection**: All `/[locale]/(app)/*` routes must be protected by middleware.ts
+- **Cookie Settings**: Supabase handles secure, httpOnly cookies automatically
+- **Session Validation**: Check for valid session on every protected route and API call
+- **RLS Policies**: Always enforce Row Level Security policies in Supabase
+
+## Permission System
+
+- **Deal Participants**: Check user's role (admin, member, contributor) and side (buyer, seller)
+- **Granular Permissions**: Use permission calculation functions from `lib/utils/permissions.ts`
+- **Server-side Checks**: Always verify permissions in Server Actions before mutations
+- **Client-side UI**: Hide/disable UI elements based on permissions for better UX
+- **Contributor Access**: Contributors only see assigned documents/questions (enforced by RLS)
+
+## Stripe Webhook Security
+
+- **CRITICAL**: Always verify Stripe webhook signatures before processing
+- Use Stripe SDK to validate the signature matches
+- Reject any webhook with an invalid signature immediately
+- Only process events from your Stripe account
+- Handle idempotency for webhook retries
+
+## Supabase Security
+
+- **Connection**: Always use environment variables for Supabase URL and keys
+- **RLS Policies**: Enforce row-level security on all tables
+- **Service Role Key**: Only use service role key on server-side (never in client code)
+- **Anon Key**: Use anon key for client-side, RLS will protect data
+- **Storage Policies**: Implement RLS on storage buckets for document access
+- **Indexes**: Add indexes on frequently queried fields (deal_id, user_id, status)
+
+## Supabase Storage Security
+
+- **File Upload**: Always validate file types and sizes before upload
+- **Signed URLs**: Use signed URLs for downloading private documents
+- **RLS Policies**: Implement storage policies based on deal participation
+- **Path Structure**: Use `{deal_id}/{item_id}/{file_id}-{filename}` for organization
+- **Max File Size**: Enforce 100MB limit on uploads
+
+## API Route Security
+
+- **Session Check**: Every API route must validate the Supabase session
+- **Input Validation**: Validate all request bodies and query parameters with Zod
+- **Error Messages**: Don't leak sensitive information in error responses
+- **CORS**: Restrict CORS to your own domain only
+- **Rate Limiting**: Implement rate limiting on sensitive endpoints
+
+## Environment Variables
+
+Never commit these to git:
+- `NEXT_PUBLIC_SUPABASE_URL` - Supabase project URL (public)
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Supabase anon key (public)
+- `SUPABASE_SERVICE_ROLE_KEY` - Supabase service role key (secret)
+- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` - Stripe publishable key (public)
+- `STRIPE_SECRET_KEY` - Stripe secret key (secret)
+- `STRIPE_WEBHOOK_SECRET` - Stripe webhook signing secret
+- `RESEND_API_KEY` or `AWS_*` - Email service credentials
+- `NEXT_PUBLIC_APP_URL` - Application URL

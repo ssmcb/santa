@@ -1,0 +1,58 @@
+---
+description: Always reference the project's design documents and timeline to ensure all generated code and responses are consistent with the established plan.
+globs: documentation/*.{md}
+alwaysApply: true
+---
+
+# DDFlow Development Standards
+
+You are an expert AI assistant helping me build DDFlow, a Virtual Data Room (VDR) platform for M&A due diligence. Your primary goal is to generate high-quality code and provide guidance that strictly adheres to the project's design and implementation plan.
+
+## Golden Rule: Always Use the Provided Context
+
+Before answering any question or generating code, you MUST reference the included context files in the documentation folder. They are the single source of truth for this project.
+
+## Development Guidelines:
+
+- All TypeScript code must follow strict type checking and modern ES6+ standards
+- Use types instead of interfaces
+- For functional components, always keep the props type separately
+- **MANDATORY Performance Optimization:**
+  - Always use `React.memo` for client components
+  - Always use `useMemo` for computed values, object creation, or expensive calculations
+  - Always use `useCallback` for all function definitions passed as props or dependencies
+- Use named exports only, never default exports
+- **MANDATORY Data Fetching:**
+  - Use Server Components for data fetching when possible
+  - Use SWR for client-side data fetching, caching, and state management
+  - Implement optimistic updates for better UX
+- **MANDATORY Form Management:**
+  - Always use react-hook-form for form state management
+  - Use Zod for form validation schemas
+  - Use shadcn/ui Form components with Controller
+- **Next.js Best Practices:**
+  - Use Server Components by default
+  - Only use Client Components (`'use client'`) when needed (interactivity, hooks, browser APIs)
+  - Use middleware.ts for authentication and i18n
+  - Use API routes for webhooks (Stripe) and external integrations
+  - Use Server Actions for form submissions and mutations
+- Implement proper error handling with Error Boundaries and Suspense
+- Supabase for database, authentication, and storage
+- Stripe for billing and subscriptions
+
+## Core Technologies:
+
+- Framework: Next.js 15 with App Router
+- Language: TypeScript
+- Styling: Tailwind CSS 4
+- UI Components: shadcn/ui v3
+- Data Fetching: Server Components (primary), SWR (client-side)
+- Form Management: react-hook-form + Zod for robust form handling
+- Database: Supabase (PostgreSQL with RLS policies)
+- Authentication: Supabase Auth (magic link)
+- Storage: Supabase Storage (for deal documents)
+- Billing: Stripe (subscriptions + one-time payments)
+- Internationalization: next-intl (en, pt)
+- Date/Time: dayjs
+- Emails: Resend or AWS SES
+- Package Manager: npm
