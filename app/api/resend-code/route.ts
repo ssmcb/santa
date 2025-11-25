@@ -15,10 +15,7 @@ export async function POST(request: NextRequest) {
     const { email } = await request.json();
 
     if (!email) {
-      return NextResponse.json(
-        { error: 'Email is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Email is required' }, { status: 400 });
     }
 
     await connectDB();
@@ -29,10 +26,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!participant) {
-      return NextResponse.json(
-        { error: 'Email not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Email not found' }, { status: 404 });
     }
 
     // Check cooldown period
@@ -86,9 +80,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Resend code error:', error);
-    return NextResponse.json(
-      { error: 'Failed to resend code' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to resend code' }, { status: 500 });
   }
 }

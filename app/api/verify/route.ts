@@ -9,10 +9,7 @@ export async function POST(request: NextRequest) {
     const { email, code } = await request.json();
 
     if (!email || !code) {
-      return NextResponse.json(
-        { error: 'Email and code are required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Email and code are required' }, { status: 400 });
     }
 
     await connectDB();
@@ -24,18 +21,12 @@ export async function POST(request: NextRequest) {
     });
 
     if (!participant) {
-      return NextResponse.json(
-        { error: 'Invalid verification code' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid verification code' }, { status: 400 });
     }
 
     // Check if code has expired
     if (isCodeExpired(participant.code_expires_at)) {
-      return NextResponse.json(
-        { error: 'Verification code has expired' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Verification code has expired' }, { status: 400 });
     }
 
     // Clear verification code and expiration
@@ -56,9 +47,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Verification error:', error);
-    return NextResponse.json(
-      { error: 'Verification failed' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Verification failed' }, { status: 500 });
   }
 }

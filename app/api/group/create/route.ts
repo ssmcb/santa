@@ -19,10 +19,7 @@ export async function POST(request: NextRequest) {
     // Check authentication
     const session = await getSession();
     if (!session.isLoggedIn || !session.participantId) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const body = await request.json();
@@ -33,10 +30,7 @@ export async function POST(request: NextRequest) {
     // Verify the participant exists and matches the session
     const participant = await Participant.findById(session.participantId);
     if (!participant || participant.email !== ownerEmail.toLowerCase()) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Generate unique invite ID
@@ -68,15 +62,9 @@ export async function POST(request: NextRequest) {
     console.error('Create group error:', error);
 
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: 'Invalid input', details: error.errors },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid input', details: error.issues }, { status: 400 });
     }
 
-    return NextResponse.json(
-      { error: 'Failed to create group' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to create group' }, { status: 500 });
   }
 }

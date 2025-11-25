@@ -20,7 +20,7 @@ export const DashboardContent = React.memo(({ locale, participantName }: Dashboa
         <CardHeader>
           <CardTitle className="text-3xl">Welcome, {participantName}! 🎅</CardTitle>
           <CardDescription>
-            You're all set! Now you can create your first Secret Santa group.
+            You&apos;re all set! Now you can create your first Secret Santa group.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

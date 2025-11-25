@@ -23,10 +23,7 @@ export async function POST(request: NextRequest) {
     // Find the group by invite_id
     const group = await Group.findOne({ invite_id: inviteId });
     if (!group) {
-      return NextResponse.json(
-        { error: 'Invalid invitation link' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Invalid invitation link' }, { status: 404 });
     }
 
     // Check if participant with this email already exists in this group
@@ -123,15 +120,9 @@ export async function POST(request: NextRequest) {
     console.error('Join group error:', error);
 
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: 'Invalid input', details: error.errors },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid input', details: error.issues }, { status: 400 });
     }
 
-    return NextResponse.json(
-      { error: 'Failed to join group' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to join group' }, { status: 500 });
   }
 }

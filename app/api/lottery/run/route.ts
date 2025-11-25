@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db/mongodb';
 import { Group } from '@/lib/db/models/Group';
-import { Participant } from '@/lib/db/models/Participant';
+import { Participant, ParticipantDocument } from '@/lib/db/models/Participant';
 import { getSession } from '@/lib/session';
 import { runSecretSantaLottery, validateLotteryAssignments } from '@/lib/utils/lottery';
 import { sendEmail } from '@/lib/email/ses';
@@ -17,10 +17,7 @@ export async function POST(request: NextRequest) {
     // Check authentication
     const session = await getSession();
     if (!session.isLoggedIn || !session.participantId) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const body = await request.json();
@@ -31,19 +28,13 @@ export async function POST(request: NextRequest) {
     // Get the participant making the request
     const participant = await Participant.findById(session.participantId);
     if (!participant) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Get the group
     const group = await Group.findById(groupId);
     if (!group) {
-      return NextResponse.json(
-        { error: 'Group not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Group not found' }, { status: 404 });
     }
 
     // Check if user is the group owner
@@ -92,7 +83,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Update all participants with their assignments
-    const updatePromises: Promise<any>[] = [];
+    const updatePromises: Promise<ParticipantDocument | null>[] = [];
 
     for (const [giverId, recipientId] of assignments) {
       updatePromises.push(
@@ -114,7 +105,9 @@ export async function POST(request: NextRequest) {
     const locale = request.headers.get('accept-language')?.startsWith('pt') ? 'pt' : 'en';
 
     // Send assignment emails to all participants
-    const emailPromises: Promise<any>[] = [];
+    const emailPromises: Promise<
+      { success: boolean; messageId: string | undefined } | ParticipantDocument | null
+    >[] = [];
 
     for (const [giverId, recipientId] of assignments) {
       const giver = participants.find((p) => p._id.toString() === giverId);
@@ -159,10 +152,7 @@ export async function POST(request: NextRequest) {
     console.error('Lottery error:', error);
 
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: 'Invalid input', details: error.errors },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid input', details: error.issues }, { status: 400 });
     }
 
     return NextResponse.json(

@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port=3011",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "check": "eslint && tsc --noEmit && npm run format",
+    "app:kill": "pkill -f 'next dev' && sleep 2 && rm -rf .next"
   },
   "dependencies": {
     "@aws-sdk/client-ses": "^3.939.0",

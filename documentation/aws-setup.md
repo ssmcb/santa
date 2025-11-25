@@ -166,6 +166,7 @@ Create `vercel.json`:
 #### Option C: AWS Lambda (Advanced)
 
 Create a Lambda function that:
+
 1. Triggers on SQS messages
 2. Calls your webhook endpoint
 3. Processes notifications immediately

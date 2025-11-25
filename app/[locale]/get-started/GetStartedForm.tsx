@@ -70,9 +70,7 @@ export const GetStartedForm = React.memo(({ locale }: GetStartedFormProps) => {
     <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle className="text-2xl">🎅 {t('getStarted')}</CardTitle>
-        <CardDescription>
-          Create your Secret Santa account to get started
-        </CardDescription>
+        <CardDescription>Create your Secret Santa account to get started</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -85,9 +83,7 @@ export const GetStartedForm = React.memo(({ locale }: GetStartedFormProps) => {
               {...register('name')}
               disabled={isSubmitting}
             />
-            {errors.name && (
-              <p className="text-sm text-red-600">{errors.name.message}</p>
-            )}
+            {errors.name && <p className="text-sm text-red-600">{errors.name.message}</p>}
           </div>
 
           <div className="space-y-2">
@@ -99,9 +95,7 @@ export const GetStartedForm = React.memo(({ locale }: GetStartedFormProps) => {
               {...register('email')}
               disabled={isSubmitting}
             />
-            {errors.email && (
-              <p className="text-sm text-red-600">{errors.email.message}</p>
-            )}
+            {errors.email && <p className="text-sm text-red-600">{errors.email.message}</p>}
           </div>
 
           {error && (

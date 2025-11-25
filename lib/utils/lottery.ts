@@ -11,9 +11,7 @@ type ParticipantForLottery = {
  *
  * Uses a derangement algorithm to ensure no one gets themselves.
  */
-export function runSecretSantaLottery(
-  participants: ParticipantForLottery[]
-): Map<string, string> {
+export function runSecretSantaLottery(participants: ParticipantForLottery[]): Map<string, string> {
   if (participants.length < 3) {
     throw new Error('At least 3 participants are required for Secret Santa');
   }

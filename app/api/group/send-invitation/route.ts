@@ -16,10 +16,7 @@ export async function POST(request: NextRequest) {
     // Check authentication
     const session = await getSession();
     if (!session.isLoggedIn || !session.participantId) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const body = await request.json();
@@ -30,19 +27,13 @@ export async function POST(request: NextRequest) {
     // Get the participant making the request
     const participant = await Participant.findById(session.participantId);
     if (!participant) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Get the group
     const group = await Group.findById(groupId);
     if (!group) {
-      return NextResponse.json(
-        { error: 'Group not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Group not found' }, { status: 404 });
     }
 
     // Check if user is the group owner
@@ -59,10 +50,7 @@ export async function POST(request: NextRequest) {
     );
 
     if (alreadySent) {
-      return NextResponse.json(
-        { error: 'Invitation already sent to this email' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invitation already sent to this email' }, { status: 400 });
     }
 
     // Get locale from Accept-Language header
@@ -99,9 +87,9 @@ export async function POST(request: NextRequest) {
               <h1>🎅 Secret Santa</h1>
             </div>
             <div class="content">
-              <h2>${isPortuguese ? 'Você foi convidado!' : 'You\'re Invited!'}</h2>
+              <h2>${isPortuguese ? 'Você foi convidado!' : "You're Invited!"}</h2>
               <p>
-                ${isPortuguese ? 'Você foi convidado para participar de:' : 'You\'ve been invited to join:'}
+                ${isPortuguese ? 'Você foi convidado para participar de:' : "You've been invited to join:"}
               </p>
               <div class="info">
                 <h3>${group.name}</h3>
@@ -124,9 +112,9 @@ export async function POST(request: NextRequest) {
     `;
 
     const textBody = `
-${isPortuguese ? 'Você foi convidado!' : 'You\'re Invited!'}
+${isPortuguese ? 'Você foi convidado!' : "You're Invited!"}
 
-${isPortuguese ? 'Você foi convidado para participar de:' : 'You\'ve been invited to join:'}
+${isPortuguese ? 'Você foi convidado para participar de:' : "You've been invited to join:"}
 
 ${group.name}
 
@@ -160,15 +148,9 @@ ${isPortuguese ? 'Clique no link para entrar:' : 'Click the link to join:'} ${in
     console.error('Send invitation error:', error);
 
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: 'Invalid input', details: error.errors },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid input', details: error.issues }, { status: 400 });
     }
 
-    return NextResponse.json(
-      { error: 'Failed to send invitation' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to send invitation' }, { status: 500 });
   }
 }

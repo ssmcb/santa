@@ -22,10 +22,7 @@ export async function POST(request: NextRequest) {
     // Check if admin user already exists
     const existingAdmin = await AdminUser.findOne({ is_registered: true });
     if (existingAdmin) {
-      return NextResponse.json(
-        { error: 'Admin user already exists' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Admin user already exists' }, { status: 400 });
     }
 
     // Generate verification code
@@ -34,7 +31,7 @@ export async function POST(request: NextRequest) {
     const codeSentAt = new Date();
 
     // Create admin user
-    const adminUser = await AdminUser.create({
+    await AdminUser.create({
       email: email.toLowerCase(),
       name,
       is_registered: true,
@@ -81,15 +78,9 @@ export async function POST(request: NextRequest) {
     console.error('Admin signup error:', error);
 
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: 'Invalid input', details: error.errors },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid input', details: error.issues }, { status: 400 });
     }
 
-    return NextResponse.json(
-      { error: 'Failed to create account' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to create account' }, { status: 500 });
   }
 }

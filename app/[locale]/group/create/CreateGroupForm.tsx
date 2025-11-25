@@ -76,9 +76,7 @@ export const CreateGroupForm = React.memo(({ locale, ownerEmail }: CreateGroupFo
     <Card className="w-full max-w-2xl">
       <CardHeader>
         <CardTitle className="text-2xl">🎅 {t('create')}</CardTitle>
-        <CardDescription>
-          Set up your Secret Santa event details
-        </CardDescription>
+        <CardDescription>Set up your Secret Santa event details</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -91,22 +89,13 @@ export const CreateGroupForm = React.memo(({ locale, ownerEmail }: CreateGroupFo
               {...register('name')}
               disabled={isSubmitting}
             />
-            {errors.name && (
-              <p className="text-sm text-red-600">{errors.name.message}</p>
-            )}
+            {errors.name && <p className="text-sm text-red-600">{errors.name.message}</p>}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="date">{t('date')}</Label>
-            <Input
-              id="date"
-              type="date"
-              {...register('date')}
-              disabled={isSubmitting}
-            />
-            {errors.date && (
-              <p className="text-sm text-red-600">{errors.date.message}</p>
-            )}
+            <Input id="date" type="date" {...register('date')} disabled={isSubmitting} />
+            {errors.date && <p className="text-sm text-red-600">{errors.date.message}</p>}
           </div>
 
           <div className="space-y-2">
@@ -118,9 +107,7 @@ export const CreateGroupForm = React.memo(({ locale, ownerEmail }: CreateGroupFo
               {...register('place')}
               disabled={isSubmitting}
             />
-            {errors.place && (
-              <p className="text-sm text-red-600">{errors.place.message}</p>
-            )}
+            {errors.place && <p className="text-sm text-red-600">{errors.place.message}</p>}
           </div>
 
           <div className="space-y-2">
@@ -132,9 +119,7 @@ export const CreateGroupForm = React.memo(({ locale, ownerEmail }: CreateGroupFo
               {...register('budget')}
               disabled={isSubmitting}
             />
-            {errors.budget && (
-              <p className="text-sm text-red-600">{errors.budget.message}</p>
-            )}
+            {errors.budget && <p className="text-sm text-red-600">{errors.budget.message}</p>}
           </div>
 
           {error && (

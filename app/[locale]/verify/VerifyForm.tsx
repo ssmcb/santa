@@ -39,7 +39,6 @@ export const VerifyForm = React.memo(({ locale, initialEmail, initialCode }: Ver
     register,
     handleSubmit,
     watch,
-    setValue,
     formState: { errors },
   } = useForm<VerifyFormData>({
     resolver: zodResolver(verifySchema),
@@ -50,23 +49,6 @@ export const VerifyForm = React.memo(({ locale, initialEmail, initialCode }: Ver
   });
 
   const email = watch('email');
-
-  // Auto-submit if code is provided in URL
-  useEffect(() => {
-    if (initialEmail && initialCode && initialCode.length === 6) {
-      handleSubmit(onSubmit)();
-    }
-  }, [initialEmail, initialCode]);
-
-  // Cooldown timer
-  useEffect(() => {
-    if (cooldownSeconds > 0) {
-      const timer = setTimeout(() => {
-        setCooldownSeconds(cooldownSeconds - 1);
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [cooldownSeconds]);
 
   const onSubmit = useCallback(
     async (data: VerifyFormData) => {
@@ -103,6 +85,23 @@ export const VerifyForm = React.memo(({ locale, initialEmail, initialCode }: Ver
     },
     [locale, router, t, tCommon]
   );
+
+  // Auto-submit if code is provided in URL
+  useEffect(() => {
+    if (initialEmail && initialCode && initialCode.length === 6) {
+      handleSubmit(onSubmit)();
+    }
+  }, [initialEmail, initialCode, handleSubmit, onSubmit]);
+
+  // Cooldown timer
+  useEffect(() => {
+    if (cooldownSeconds > 0) {
+      const timer = setTimeout(() => {
+        setCooldownSeconds(cooldownSeconds - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [cooldownSeconds]);
 
   const handleResendCode = useCallback(async () => {
     if (cooldownSeconds > 0 || !email) return;
@@ -147,9 +146,7 @@ export const VerifyForm = React.memo(({ locale, initialEmail, initialCode }: Ver
     <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle className="text-2xl">📧 {t('verify')}</CardTitle>
-        <CardDescription>
-          Enter the verification code sent to your email
-        </CardDescription>
+        <CardDescription>Enter the verification code sent to your email</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -162,9 +159,7 @@ export const VerifyForm = React.memo(({ locale, initialEmail, initialCode }: Ver
               {...register('email')}
               disabled={isSubmitting}
             />
-            {errors.email && (
-              <p className="text-sm text-red-600">{errors.email.message}</p>
-            )}
+            {errors.email && <p className="text-sm text-red-600">{errors.email.message}</p>}
             <p className="text-xs text-zinc-500">
               You can edit your email if it was entered incorrectly
             </p>
@@ -181,9 +176,7 @@ export const VerifyForm = React.memo(({ locale, initialEmail, initialCode }: Ver
               disabled={isSubmitting}
               className="text-center text-2xl tracking-widest font-mono"
             />
-            {errors.code && (
-              <p className="text-sm text-red-600">{errors.code.message}</p>
-            )}
+            {errors.code && <p className="text-sm text-red-600">{errors.code.message}</p>}
           </div>
 
           {error && (

@@ -24,11 +24,13 @@ A modern, full-stack Secret Santa application built with Next.js 16, supporting 
 ### Installation
 
 1. **Clone and install dependencies:**
+
    ```bash
    npm install
    ```
 
 2. **Set up environment variables:**
+
    ```bash
    cp .env.example .env.local
    ```
@@ -42,6 +44,7 @@ A modern, full-stack Secret Santa application built with Next.js 16, supporting 
    - `NEXT_PUBLIC_APP_URL`: Your app URL
 
 3. **Run the development server:**
+
    ```bash
    npm run dev
    ```
@@ -187,6 +190,7 @@ Make sure to set these in your deployment platform:
 ### Other Platforms
 
 The app can be deployed to any platform supporting Next.js:
+
 - Railway
 - Render
 - AWS Amplify

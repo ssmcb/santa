@@ -2,14 +2,14 @@
 
 ## 1. Stack & Tools
 
-| Component | Technology | Rationale |
-|-----------|------------|-----------|
-| **Frontend/Backend** | Next.js 16 (App Router) | Full-stack capability with API Routes for rapid development. |
-| **Styling/UI** | Shadcn UI + Tailwind CSS 4 | Provides accessible, well-designed components and utility-first styling for speed. |
-| **Internationalization** | next-intl | Robust routing and component-level translation support for `en` and `pt`. |
-| **Database** | MongoDB (via Mongoose) | Flexible, scalable NoSQL store for quick schema iteration. |
-| **Email Service** | AWS SES | Reliable, cost-effective transactional email for verification and assignments. |
-| **Session Management** | Encrypted Cookies (iron-session) | Simple, stateless session management tied to the verification code flow. |
+| Component                | Technology                       | Rationale                                                                          |
+| ------------------------ | -------------------------------- | ---------------------------------------------------------------------------------- |
+| **Frontend/Backend**     | Next.js 16 (App Router)          | Full-stack capability with API Routes for rapid development.                       |
+| **Styling/UI**           | Shadcn UI + Tailwind CSS 4       | Provides accessible, well-designed components and utility-first styling for speed. |
+| **Internationalization** | next-intl                        | Robust routing and component-level translation support for `en` and `pt`.          |
+| **Database**             | MongoDB (via Mongoose)           | Flexible, scalable NoSQL store for quick schema iteration.                         |
+| **Email Service**        | AWS SES                          | Reliable, cost-effective transactional email for verification and assignments.     |
+| **Session Management**   | Encrypted Cookies (iron-session) | Simple, stateless session management tied to the verification code flow.           |
 
 ## 2. Data Models (MongoDB)
 
@@ -17,45 +17,45 @@
 
 **Purpose:** Stores the single user/email who is allowed to "Get Started" and create the first group.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `email` | `String` | The email of the first-ever user (unique). |
-| `name` | `String` | The name of the first-ever user. |
+| Field           | Type      | Description                                                                          |
+| --------------- | --------- | ------------------------------------------------------------------------------------ |
+| `email`         | `String`  | The email of the first-ever user (unique).                                           |
+| `name`          | `String`  | The name of the first-ever user.                                                     |
 | `is_registered` | `Boolean` | Always `true` after the first user signs up. Used to guard the `/get-started` route. |
 
 ### 2.2 Group Collection
 
 **Purpose:** Defines a Secret Santa event.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `_id` | `ObjectId` | Unique identifier. |
-| `name` | `String` | Event name (e.g., "Family Christmas 2025"). |
-| `budget` | `String` | Suggested gift budget. |
-| `date` | `Date` | Date of the gift exchange. |
-| `place` | `String` | Location/place of the event. |
-| `owner_email` | `String` | The email of the user who created the group. |
-| `participants` | `Array<ObjectId>` | References to `Participant` documents. |
-| `invite_id` | `String` | Unique, unguessable ID for invitation links. |
-| `is_drawn` | `Boolean` | True if the lottery has been executed. |
+| Field              | Type                                    | Description                                                                       |
+| ------------------ | --------------------------------------- | --------------------------------------------------------------------------------- |
+| `_id`              | `ObjectId`                              | Unique identifier.                                                                |
+| `name`             | `String`                                | Event name (e.g., "Family Christmas 2025").                                       |
+| `budget`           | `String`                                | Suggested gift budget.                                                            |
+| `date`             | `Date`                                  | Date of the gift exchange.                                                        |
+| `place`            | `String`                                | Location/place of the event.                                                      |
+| `owner_email`      | `String`                                | The email of the user who created the group.                                      |
+| `participants`     | `Array<ObjectId>`                       | References to `Participant` documents.                                            |
+| `invite_id`        | `String`                                | Unique, unguessable ID for invitation links.                                      |
+| `is_drawn`         | `Boolean`                               | True if the lottery has been executed.                                            |
 | `invitations_sent` | `Array<{email: String, sent_at: Date}>` | Tracks which emails the owner has sent invitations to (prevents duplicate sends). |
 
 ### 2.3 Participant Collection
 
 **Purpose:** Stores individual user details, their assignment, and the login token.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `_id` | `ObjectId` | Unique identifier. |
-| `group_id` | `ObjectId` | Reference to the parent `Group`. |
-| `name` | `String` | Participant's display name (single name field). |
-| `email` | `String` | Participant's email. |
-| `recipient_id` | `ObjectId` | The ID of the person they drew. |
-| `verification_code` | `String` | Unique code for password-less login/verification. |
-| `code_expires_at` | `Date` | Timestamp for code expiration (e.g., 30 minutes). |
-| `code_sent_at` | `Date` | Timestamp of when the last verification code was sent (for resend cooldown). |
-| `assignment_email_status` | `String` | Status of assignment email: `pending`, `sent`, `delivered`, `bounced`, `failed`. |
-| `assignment_email_sent_at` | `Date` | Timestamp of when assignment email was sent. |
+| Field                      | Type       | Description                                                                      |
+| -------------------------- | ---------- | -------------------------------------------------------------------------------- |
+| `_id`                      | `ObjectId` | Unique identifier.                                                               |
+| `group_id`                 | `ObjectId` | Reference to the parent `Group`.                                                 |
+| `name`                     | `String`   | Participant's display name (single name field).                                  |
+| `email`                    | `String`   | Participant's email.                                                             |
+| `recipient_id`             | `ObjectId` | The ID of the person they drew.                                                  |
+| `verification_code`        | `String`   | Unique code for password-less login/verification.                                |
+| `code_expires_at`          | `Date`     | Timestamp for code expiration (e.g., 30 minutes).                                |
+| `code_sent_at`             | `Date`     | Timestamp of when the last verification code was sent (for resend cooldown).     |
+| `assignment_email_status`  | `String`   | Status of assignment email: `pending`, `sent`, `delivered`, `bounced`, `failed`. |
+| `assignment_email_sent_at` | `Date`     | Timestamp of when assignment email was sent.                                     |
 
 ## 3. Core Application Flow & Logic
 

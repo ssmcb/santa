@@ -24,10 +24,7 @@ export async function POST(request: NextRequest) {
     const expectedToken = process.env.WEBHOOK_SECRET;
 
     if (expectedToken && authHeader !== `Bearer ${expectedToken}`) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const processedCount = await processSQSMessages(queueUrl);
@@ -39,10 +36,7 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('SES notification processing error:', error);
-    return NextResponse.json(
-      { error: 'Failed to process notifications' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to process notifications' }, { status: 500 });
   }
 }
 

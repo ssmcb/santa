@@ -3,7 +3,7 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
 export type EmailStatus = 'pending' | 'sent' | 'delivered' | 'bounced' | 'failed';
 
 export type ParticipantDocument = Document & {
-  group_id: mongoose.Types.ObjectId;
+  group_id: mongoose.Types.ObjectId | null;
   name: string;
   email: string;
   recipient_id: mongoose.Types.ObjectId | null;
@@ -19,7 +19,8 @@ const ParticipantSchema = new Schema<ParticipantDocument>(
     group_id: {
       type: Schema.Types.ObjectId,
       ref: 'Group',
-      required: true,
+      required: false,
+      default: null,
       index: true,
     },
     name: {
@@ -71,4 +72,5 @@ ParticipantSchema.index({ email: 1 });
 ParticipantSchema.index({ verification_code: 1 });
 
 export const Participant: Model<ParticipantDocument> =
-  mongoose.models.Participant || mongoose.model<ParticipantDocument>('Participant', ParticipantSchema);
+  mongoose.models.Participant ||
+  mongoose.model<ParticipantDocument>('Participant', ParticipantSchema);
