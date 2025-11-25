@@ -1,26 +1,26 @@
 'use client';
 
-import React from 'react';
+import { memo, useCallback, useState } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
-import { Candy } from 'lucide-react';
+import { Gift } from 'lucide-react';
 
 type NavigationProps = {
   isLoggedIn: boolean;
 };
 
-export const Navigation = React.memo(({ isLoggedIn }: NavigationProps) => {
+export const Navigation = memo(({ isLoggedIn }: NavigationProps) => {
   const t = useTranslations('common');
   const tAuth = useTranslations('auth');
   const params = useParams();
   const router = useRouter();
   const locale = params.locale as string;
-  const [isSigningOut, setIsSigningOut] = React.useState(false);
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
-  const handleSignOut = async () => {
+  const handleSignOut = useCallback(async () => {
     setIsSigningOut(true);
     try {
       const response = await fetch('/api/auth/signout', {
@@ -36,7 +36,7 @@ export const Navigation = React.memo(({ isLoggedIn }: NavigationProps) => {
     } finally {
       setIsSigningOut(false);
     }
-  };
+  }, [locale, router]);
 
   return (
     <nav className="border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
@@ -44,7 +44,7 @@ export const Navigation = React.memo(({ isLoggedIn }: NavigationProps) => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href={`/${locale}`} className="flex items-center gap-2">
-            <Candy className="w-7 h-7 text-zinc-900 dark:text-zinc-50" />
+            <Gift className="w-7 h-7 text-zinc-900 dark:text-zinc-50" />
             <span className="font-bold text-xl text-zinc-900 dark:text-zinc-50">Secret Santa</span>
           </Link>
 

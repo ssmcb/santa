@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, DollarSign, Users, Gift, Candy } from 'lucide-react';
+import { MapPin, DollarSign, Users, Gift } from 'lucide-react';
 
 type Group = {
   id: string;
@@ -36,7 +36,7 @@ export const DashboardContent = React.memo(
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50 flex items-center gap-2">
-                <Candy className="w-8 h-8" />
+                <Gift className="w-8 h-8" />
                 Welcome, {participantName}!
               </h1>
               <p className="text-zinc-600 dark:text-zinc-400 mt-1">

@@ -60,7 +60,12 @@
     "createGroupCTA": "Create a Secret Santa group, invite participants, and let the magic happen!",
     "youHaveGroups": "You have {count} {groups}",
     "owner": "Owner",
-    "drawn": "Drawn"
+    "drawn": "Drawn",
+    "edit": "Edit",
+    "groupUpdatedSuccess": "Group updated successfully!",
+    "removeParticipant": "Remove",
+    "confirmRemoveParticipant": "Are you sure you want to remove this participant?",
+    "participantRemovedSuccess": "Participant removed successfully!"
   },
   "participants": {
     "name": "Name",

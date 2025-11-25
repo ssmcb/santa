@@ -60,7 +60,12 @@
     "createGroupCTA": "Crie um grupo de Amigo Secreto, convide participantes e deixe a mágica acontecer!",
     "youHaveGroups": "Você tem {count} {groups}",
     "owner": "Proprietário",
-    "drawn": "Sorteado"
+    "drawn": "Sorteado",
+    "edit": "Editar",
+    "groupUpdatedSuccess": "Grupo atualizado com sucesso!",
+    "removeParticipant": "Remover",
+    "confirmRemoveParticipant": "Tem certeza que deseja remover este participante?",
+    "participantRemovedSuccess": "Participante removido com sucesso!"
   },
   "participants": {
     "name": "Nome",

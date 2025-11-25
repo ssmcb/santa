@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Candy } from 'lucide-react';
+import { Gift } from 'lucide-react';
 
 const createGroupSchema = z.object({
   name: z.string().min(1, 'Group name is required'),
@@ -77,7 +77,7 @@ export const CreateGroupForm = React.memo(({ locale, ownerEmail }: CreateGroupFo
     <Card className="w-full max-w-2xl">
       <CardHeader>
         <CardTitle className="text-2xl flex items-center gap-2">
-          <Candy className="w-7 h-7" />
+          <Gift className="w-7 h-7" />
           {t('create')}
         </CardTitle>
         <CardDescription>{t('createDescription')}</CardDescription>

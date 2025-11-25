@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import { Fragment, memo } from 'react';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 
@@ -13,13 +13,13 @@ type BreadcrumbsProps = {
   items: BreadcrumbItem[];
 };
 
-export const Breadcrumbs = React.memo(({ items }: BreadcrumbsProps) => {
+export const Breadcrumbs = memo(({ items }: BreadcrumbsProps) => {
   return (
     <nav className="flex items-center space-x-2 text-sm text-zinc-600 dark:text-zinc-400 mb-4">
       {items.map((item, index) => {
         const isLast = index === items.length - 1;
         return (
-          <React.Fragment key={index}>
+          <Fragment key={index}>
             {index > 0 && <ChevronRight className="w-4 h-4" />}
             {item.href && !isLast ? (
               <Link
@@ -33,7 +33,7 @@ export const Breadcrumbs = React.memo(({ items }: BreadcrumbsProps) => {
                 {item.label}
               </span>
             )}
-          </React.Fragment>
+          </Fragment>
         );
       })}
     </nav>

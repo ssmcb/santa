@@ -3,7 +3,13 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import dayjs from 'dayjs';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+import 'dayjs/locale/pt-br';
+import 'dayjs/locale/en';
 import { Button } from '@/components/ui/button';
+
+dayjs.extend(localizedFormat);
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,7 +24,18 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
-import { Calendar, MapPin, DollarSign, Gift, Candy } from 'lucide-react';
+import {
+  Calendar,
+  MapPin,
+  DollarSign,
+  Gift,
+  ChevronDown,
+  ChevronUp,
+  Pencil,
+  Trash2,
+  Save,
+  X,
+} from 'lucide-react';
 
 type Group = {
   id: string;
@@ -65,6 +82,30 @@ export const GroupDashboard = React.memo(
     const [isRunningLottery, setIsRunningLottery] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
+    const [showInvitationsSent, setShowInvitationsSent] = useState(false);
+    const [isEditingGroup, setIsEditingGroup] = useState(false);
+    const [isSavingGroup, setIsSavingGroup] = useState(false);
+
+    // Helper to format date for input (YYYY-MM-DD)
+    const formatDateForInput = useCallback((dateString: string) => {
+      return dayjs(dateString).format('YYYY-MM-DD');
+    }, []);
+
+    // Helper to format date for display (localized)
+    const formatDateForDisplay = useCallback(
+      (dateString: string) => {
+        const localeName = locale === 'pt' ? 'pt-br' : 'en';
+        return dayjs(dateString).locale(localeName).format('L');
+      },
+      [locale]
+    );
+
+    const [editedGroup, setEditedGroup] = useState({
+      name: group.name,
+      date: formatDateForInput(group.date),
+      place: group.place,
+      budget: group.budget,
+    });
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
     const inviteLink = `${appUrl}/${locale}/join?inviteId=${group.inviteId}`;
@@ -146,6 +187,79 @@ export const GroupDashboard = React.memo(
       }
     }, [group.id, locale, router, tLottery, tCommon]);
 
+    const handleSaveGroup = useCallback(async () => {
+      setIsSavingGroup(true);
+      setError(null);
+      setSuccess(null);
+
+      try {
+        const response = await fetch('/api/group/update', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            groupId: group.id,
+            ...editedGroup,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.error || 'Failed to update group');
+        }
+
+        setSuccess(t('groupUpdatedSuccess'));
+        setIsEditingGroup(false);
+        router.refresh();
+      } catch (err) {
+        setError(err instanceof Error ? err.message : tCommon('error'));
+      } finally {
+        setIsSavingGroup(false);
+      }
+    }, [group.id, editedGroup, router, t, tCommon]);
+
+    const handleCancelEdit = useCallback(() => {
+      setEditedGroup({
+        name: group.name,
+        date: formatDateForInput(group.date),
+        place: group.place,
+        budget: group.budget,
+      });
+      setIsEditingGroup(false);
+    }, [group, formatDateForInput]);
+
+    const handleRemoveParticipant = useCallback(
+      async (participantId: string) => {
+        if (!confirm(t('confirmRemoveParticipant'))) return;
+
+        setError(null);
+        setSuccess(null);
+
+        try {
+          const response = await fetch('/api/group/remove-participant', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              groupId: group.id,
+              participantId,
+            }),
+          });
+
+          const result = await response.json();
+
+          if (!response.ok) {
+            throw new Error(result.error || 'Failed to remove participant');
+          }
+
+          setSuccess(t('participantRemovedSuccess'));
+          router.refresh();
+        } catch (err) {
+          setError(err instanceof Error ? err.message : tCommon('error'));
+        }
+      },
+      [group.id, router, t, tCommon]
+    );
+
     const getStatusBadge = useCallback(
       (status: string) => {
         const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
@@ -179,43 +293,108 @@ export const GroupDashboard = React.memo(
           {/* Header */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-3xl mb-4 flex items-center gap-2">
-                <Candy className="w-8 h-8" />
-                {group.name}
-              </CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-3xl mb-4 flex items-center gap-2">
+                  <Gift className="w-8 h-8" />
+                  {isEditingGroup ? (
+                    <Input
+                      value={editedGroup.name}
+                      onChange={(e) => setEditedGroup({ ...editedGroup, name: e.target.value })}
+                      className="text-3xl font-bold h-auto py-1"
+                      disabled={isSavingGroup}
+                    />
+                  ) : (
+                    group.name
+                  )}
+                </CardTitle>
+                {isOwner && !isEditingGroup && (
+                  <Button variant="outline" size="sm" onClick={() => setIsEditingGroup(true)}>
+                    <Pencil className="w-4 h-4 mr-2" />
+                    {t('edit')}
+                  </Button>
+                )}
+                {isOwner && isEditingGroup && (
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleCancelEdit}
+                      disabled={isSavingGroup}
+                    >
+                      <X className="w-4 h-4 mr-2" />
+                      {tCommon('cancel')}
+                    </Button>
+                    <Button size="sm" onClick={handleSaveGroup} disabled={isSavingGroup}>
+                      <Save className="w-4 h-4 mr-2" />
+                      {isSavingGroup ? tCommon('loading') : tCommon('save')}
+                    </Button>
+                  </div>
+                )}
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="flex items-center gap-3 p-3 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
-                  <Calendar className="w-6 h-6 text-zinc-600 dark:text-zinc-400" />
-                  <div>
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400 uppercase font-semibold">
-                      {tCommon('date')}
-                    </p>
-                    <p className="text-sm font-medium">
-                      {new Date(group.date).toLocaleDateString()}
-                    </p>
+              {isEditingGroup ? (
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="editDate">{tCommon('date')}</Label>
+                    <Input
+                      id="editDate"
+                      type="date"
+                      value={editedGroup.date}
+                      onChange={(e) => setEditedGroup({ ...editedGroup, date: e.target.value })}
+                      disabled={isSavingGroup}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="editPlace">{tCommon('location')}</Label>
+                    <Input
+                      id="editPlace"
+                      value={editedGroup.place}
+                      onChange={(e) => setEditedGroup({ ...editedGroup, place: e.target.value })}
+                      disabled={isSavingGroup}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="editBudget">{tCommon('budget')}</Label>
+                    <Input
+                      id="editBudget"
+                      value={editedGroup.budget}
+                      onChange={(e) => setEditedGroup({ ...editedGroup, budget: e.target.value })}
+                      disabled={isSavingGroup}
+                    />
                   </div>
                 </div>
-                <div className="flex items-center gap-3 p-3 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
-                  <MapPin className="w-6 h-6 text-zinc-600 dark:text-zinc-400" />
-                  <div>
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400 uppercase font-semibold">
-                      {tCommon('location')}
-                    </p>
-                    <p className="text-sm font-medium">{group.place}</p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="flex items-center gap-3 p-3 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
+                    <Calendar className="w-6 h-6 text-zinc-600 dark:text-zinc-400" />
+                    <div>
+                      <p className="text-xs text-zinc-500 dark:text-zinc-400 uppercase font-semibold">
+                        {tCommon('date')}
+                      </p>
+                      <p className="text-sm font-medium">{formatDateForDisplay(group.date)}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
+                    <MapPin className="w-6 h-6 text-zinc-600 dark:text-zinc-400" />
+                    <div>
+                      <p className="text-xs text-zinc-500 dark:text-zinc-400 uppercase font-semibold">
+                        {tCommon('location')}
+                      </p>
+                      <p className="text-sm font-medium">{group.place}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
+                    <DollarSign className="w-6 h-6 text-zinc-600 dark:text-zinc-400" />
+                    <div>
+                      <p className="text-xs text-zinc-500 dark:text-zinc-400 uppercase font-semibold">
+                        {tCommon('budget')}
+                      </p>
+                      <p className="text-sm font-medium">{group.budget}</p>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 p-3 bg-zinc-100 dark:bg-zinc-900 rounded-lg">
-                  <DollarSign className="w-6 h-6 text-zinc-600 dark:text-zinc-400" />
-                  <div>
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400 uppercase font-semibold">
-                      {tCommon('budget')}
-                    </p>
-                    <p className="text-sm font-medium">{group.budget}</p>
-                  </div>
-                </div>
-              </div>
+              )}
             </CardContent>
           </Card>
 
@@ -276,14 +455,34 @@ export const GroupDashboard = React.memo(
                   {/* Invitations sent list */}
                   {group.invitationsSent.length > 0 && (
                     <div className="mt-4">
-                      <h4 className="text-sm font-semibold mb-2">{t('invitationsSent')}</h4>
-                      <div className="text-sm text-zinc-600 dark:text-zinc-400 space-y-1">
-                        {group.invitationsSent.map((inv, idx) => (
-                          <div key={idx}>
-                            {inv.email} - {new Date(inv.sentAt).toLocaleString()}
-                          </div>
-                        ))}
-                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setShowInvitationsSent(!showInvitationsSent)}
+                        className="flex items-center gap-2 p-0 h-auto font-semibold text-sm hover:bg-transparent"
+                      >
+                        {showInvitationsSent ? (
+                          <ChevronUp className="w-4 h-4" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4" />
+                        )}
+                        {t('invitationsSent')} ({group.invitationsSent.length})
+                      </Button>
+                      {showInvitationsSent && (
+                        <div className="text-sm text-zinc-600 dark:text-zinc-400 space-y-1 mt-2">
+                          {group.invitationsSent.map((inv, idx) => {
+                            const localeName = locale === 'pt' ? 'pt-br' : 'en';
+                            const formattedDate = dayjs(inv.sentAt)
+                              .locale(localeName)
+                              .format('L LT');
+                            return (
+                              <div key={idx}>
+                                {inv.email} - {formattedDate}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
                   )}
                 </CardContent>
@@ -315,6 +514,7 @@ export const GroupDashboard = React.memo(
                         {group.isDrawn && (
                           <TableHead>{tParticipants('emailDeliveryStatus')}</TableHead>
                         )}
+                        {!group.isDrawn && <TableHead className="w-20"></TableHead>}
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -325,6 +525,24 @@ export const GroupDashboard = React.memo(
                           {group.isDrawn && (
                             <TableCell>
                               {getStatusBadge(participant.assignmentEmailStatus)}
+                            </TableCell>
+                          )}
+                          {!group.isDrawn && (
+                            <TableCell>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleRemoveParticipant(participant.id)}
+                                disabled={participant.email === currentParticipant.email}
+                                className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950"
+                                title={
+                                  participant.email === currentParticipant.email
+                                    ? 'Cannot remove yourself'
+                                    : t('removeParticipant')
+                                }
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
                             </TableCell>
                           )}
                         </TableRow>
