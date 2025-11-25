@@ -76,16 +76,15 @@ When adding any new UI text:
 Organize translations by feature area:
 ```json
 {
-  "auth": { "login": "Sign In", ... },
-  "deals": { "create": "Create Deal", ... },
-  "documents": { "upload": "Upload File", ... },
-  "questions": { "ask": "Ask Question", ... },
-  "billing": { "plans": "Pricing Plans", ... }
+  "auth": { "login": "Sign In", "verify": "Verify Email", ... },
+  "groups": { "create": "Create Group", "join": "Join Group", ... },
+  "participants": { "name": "Name", "email": "Email", ... },
+  "lottery": { "run": "Run Lottery", "reveal": "Reveal Assignment", ... },
+  "common": { "save": "Save", "cancel": "Cancel", ... }
 }
 ```
 
-## Currency & Date Formatting
+## Date Formatting
 
-- Currency: Use USD for English, BRL for Portuguese
-- Date Format: Localized using dayjs with locale support
+- Date Format: Localized using `Intl.DateTimeFormat` or date library with locale support
 - Numbers: Use proper thousands separator (, for EN, . for PT-BR)

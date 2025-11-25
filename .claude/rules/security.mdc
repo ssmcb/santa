@@ -1,5 +1,5 @@
 ---
-description: Security best practices for DDFlow - authentication, RLS policies, Stripe webhooks, and Supabase integration
+description: Security best practices for Secret Santa App - authentication, session management, and MongoDB security
 globs:
   - "**/*.{ts,tsx}"
   - "app/api/**/*"
@@ -11,62 +11,59 @@ alwaysApply: true
 
 ## Authentication & Authorization
 
-- **Supabase Auth**: Use magic link authentication (passwordless)
-- **Session Management**: Server-side session validation using Supabase SSR
-- **Middleware Protection**: All `/[locale]/(app)/*` routes must be protected by middleware.ts
-- **Cookie Settings**: Supabase handles secure, httpOnly cookies automatically
+- **Password-less Auth**: Use magic link authentication with verification codes
+- **Session Management**: Server-side session validation using iron-session (encrypted cookies)
+- **Middleware Protection**: All protected routes must be validated by middleware.ts
+- **Cookie Settings**: Use secure, httpOnly, sameSite cookies
 - **Session Validation**: Check for valid session on every protected route and API call
-- **RLS Policies**: Always enforce Row Level Security policies in Supabase
+- **Code Expiration**: Verification codes must expire after 30 minutes
 
 ## Permission System
 
-- **Deal Participants**: Check user's role (admin, member, contributor) and side (buyer, seller)
-- **Granular Permissions**: Use permission calculation functions from `lib/utils/permissions.ts`
-- **Server-side Checks**: Always verify permissions in Server Actions before mutations
+- **Group Owner**: Only the group owner can run the lottery and manage the group
+- **Participant Access**: Participants can only see their own assignment after lottery is run
+- **Invite Validation**: Always validate invite_id before allowing users to join a group
+- **Server-side Checks**: Always verify permissions in API routes and Server Actions
 - **Client-side UI**: Hide/disable UI elements based on permissions for better UX
-- **Contributor Access**: Contributors only see assigned documents/questions (enforced by RLS)
 
-## Stripe Webhook Security
+## MongoDB Security
 
-- **CRITICAL**: Always verify Stripe webhook signatures before processing
-- Use Stripe SDK to validate the signature matches
-- Reject any webhook with an invalid signature immediately
-- Only process events from your Stripe account
-- Handle idempotency for webhook retries
+- **Connection**: Always use environment variables for MongoDB connection string
+- **Input Validation**: Validate and sanitize all inputs before database queries
+- **Mongoose Schema Validation**: Use Mongoose schemas with proper validation rules
+- **Unique Constraints**: Enforce unique constraints on critical fields (email, invite_id)
+- **Indexes**: Add indexes on frequently queried fields (email, group_id, invite_id)
+- **NoSQL Injection**: Use parameterized queries and avoid string concatenation
 
-## Supabase Security
+## Email Security
 
-- **Connection**: Always use environment variables for Supabase URL and keys
-- **RLS Policies**: Enforce row-level security on all tables
-- **Service Role Key**: Only use service role key on server-side (never in client code)
-- **Anon Key**: Use anon key for client-side, RLS will protect data
-- **Storage Policies**: Implement RLS on storage buckets for document access
-- **Indexes**: Add indexes on frequently queried fields (deal_id, user_id, status)
-
-## Supabase Storage Security
-
-- **File Upload**: Always validate file types and sizes before upload
-- **Signed URLs**: Use signed URLs for downloading private documents
-- **RLS Policies**: Implement storage policies based on deal participation
-- **Path Structure**: Use `{deal_id}/{item_id}/{file_id}-{filename}` for organization
-- **Max File Size**: Enforce 100MB limit on uploads
+- **AWS SES**: Always use verified sender email addresses
+- **Link Expiration**: Email verification links must expire after 30 minutes
+- **No Sensitive Data**: Never include sensitive information in email content
+- **Rate Limiting**: Implement rate limiting to prevent email spam
 
 ## API Route Security
 
-- **Session Check**: Every API route must validate the Supabase session
+- **Session Check**: Every protected API route must validate the session cookie
 - **Input Validation**: Validate all request bodies and query parameters with Zod
 - **Error Messages**: Don't leak sensitive information in error responses
 - **CORS**: Restrict CORS to your own domain only
 - **Rate Limiting**: Implement rate limiting on sensitive endpoints
 
+## Verification Code Security
+
+- **Uniqueness**: Generate cryptographically secure random codes
+- **One-time Use**: Clear verification codes after successful use
+- **Expiration**: Enforce 30-minute expiration on all codes
+- **No Reuse**: Never allow the same code to be used twice
+
 ## Environment Variables
 
 Never commit these to git:
-- `NEXT_PUBLIC_SUPABASE_URL` - Supabase project URL (public)
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Supabase anon key (public)
-- `SUPABASE_SERVICE_ROLE_KEY` - Supabase service role key (secret)
-- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` - Stripe publishable key (public)
-- `STRIPE_SECRET_KEY` - Stripe secret key (secret)
-- `STRIPE_WEBHOOK_SECRET` - Stripe webhook signing secret
-- `RESEND_API_KEY` or `AWS_*` - Email service credentials
-- `NEXT_PUBLIC_APP_URL` - Application URL
+- `MONGODB_URI` - MongoDB connection string (secret)
+- `SESSION_SECRET` - iron-session encryption secret (secret)
+- `AWS_ACCESS_KEY_ID` - AWS access key (secret)
+- `AWS_SECRET_ACCESS_KEY` - AWS secret key (secret)
+- `AWS_REGION` - AWS region (e.g., us-east-1)
+- `AWS_SES_SENDER_EMAIL` - Verified sender email address
+- `NEXT_PUBLIC_APP_URL` - Application URL (public)

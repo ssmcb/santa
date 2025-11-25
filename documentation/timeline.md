@@ -1,39 +1,55 @@
-# 🗓️ Secret Santa App: Implementation Timeline (Checklist)
+# Secret Santa App: Implementation Timeline
 
 This is a structured timeline with granular tasks to facilitate quick development.
 
-## Phase 1: Setup & Internationalization (i18n) 🌍
-| Status | Task | Next.js / Tech Focus | Est. Time |
-| :---: | :--- | :--- | :--- |
-| $\square$ | 1. Initialize Next.js project and configure Vercel deployment. | Next.js App Router | 2 hrs |
-| $\square$ | 2. Integrate **Shadcn UI** components and utility setup (Tailwind CSS). | `npx shadcn@latest init` | 1 hr |
-| $\square$ | 3. Install and configure **`next-intl`** for `en` and `pt`. | `i18n.ts`, `middleware.ts` | 2 hrs |
-| $\square$ | 4. Define and connect MongoDB/Mongoose models (`AdminUser`, `Group`, `Participant`). | Mongoose Schemas & DB Client | 3 hrs |
-| $\square$ | 5. Configure environment variables for MongoDB, AWS SES, and Session Secret. | `.env.local` | 1 hr |
+## Phase 1: Setup & Internationalization
 
-## Phase 2: Core Authentication & User Flow 🔒
-| Status | Task | Next.js / Tech Focus | Est. Time |
-| :---: | :--- | :--- | :--- |
-| $\square$ | 6. Build the **`/get-started`** page (Form + i18n text). | Shadcn Components, Server-side Guards | 2 hrs |
-| $\square$ | 7. Implement **`/api/admin-signup`** to create `AdminUser`, generate code, and send email (AWS SES). | API Route, SES Utility, `AdminUser` CRUD | 3 hrs |
-| $\square$ | 8. Implement **`/api/verify`** endpoint for code validation and session cookie creation. | API Route, Session Utility (e.g., `iron-session`), Cookie Logic | 3 hrs |
-| $\square$ | 9. Build the **`/[locale]/verify`** page to handle verification link/code flow. | Client-side redirects, Error Handling | 2 hrs |
-| $\square$ | 10. Implement a middleware/wrapper function to check for a valid session cookie on protected routes. | Next.js Middleware/HOC | 2 hrs |
+| Status | Task | Next.js / Tech Focus |
+|:------:|------|---------------------|
+| ☐ | 1. Initialize Next.js project and configure Vercel deployment | Next.js App Router |
+| ☐ | 2. Integrate Shadcn UI components and utility setup (Tailwind CSS) | `npx shadcn@latest init` |
+| ☐ | 3. Install and configure next-intl for `en` and `pt` | `i18n.ts`, `middleware.ts` |
+| ☐ | 4. Define and connect MongoDB/Mongoose models (`AdminUser`, `Group`, `Participant`) | Mongoose Schemas & DB Client |
+| ☐ | 5. Configure environment variables for MongoDB, AWS SES, and Session Secret | `.env.local` |
 
-## Phase 3: Group & Invitation Logic 🤝
-| Status | Task | Next.js / Tech Focus | Est. Time |
-| :---: | :--- | :--- | :--- |
-| $\square$ | 11. Implement **`/api/group/create`** (Admin-only, authenticated) and generate the unique `invite_id`. | `Group` CRUD, Session Guard | 3 hrs |
-| $\square$ | 12. Build the **`/[locale]/join`** page to validate `inviteId` and collect Name/Email. | `Group` lookup, Frontend form | 2 hrs |
-| $\square$ | 13. Implement **`/api/group/join`** to create a new `Participant` and send *their* verification code/link. | `Participant` CRUD, SES, `invite_id` validation | 3 hrs |
-| $\square$ | 14. Build the **Group Dashboard** (`/[locale]/group/[groupId]`) for the group owner. | Protected Route, Data Fetching | 2 hrs |
+## Phase 2: Core Authentication & User Flow
 
-## Phase 4: Lottery & Final Assignment 🎯
-| Status | Task | Next.js / Tech Focus | Est. Time |
-| :---: | :--- | :--- | :--- |
-| $\square$ | 15. Implement the **`/api/lottery/run`** endpoint with the no-self-draw algorithm. | API Route, Algorithm Implementation | 4 hrs |
-| $\square$ | 16. Integrate the logic to update `Participant.recipient_id` and generate final assignment emails. | MongoDB Update, SES Email Template | 3 hrs |
-| $\square$ | 17. Build the **Recipient Dashboard** (`/[locale]/group/[groupId]/dashboard`) to display the assigned recipient. | Protected Route, `Participant.recipient_id` lookup | 2 hrs |
-| $\square$ | 18. Final i18n review and component styling (Shadcn finalization). | i18n Text files, Styling Tweaks | 2 hrs |
+| Status | Task | Next.js / Tech Focus |
+|:------:|------|---------------------|
+| ☐ | 6. Build the `/get-started` page (Form + i18n text) | Shadcn Components, Server-side Guards |
+| ☐ | 7. Implement `/api/admin-signup` to create `AdminUser`, generate code, and send email (AWS SES) | API Route, SES Utility, `AdminUser` CRUD |
+| ☐ | 8. Implement `/api/verify` endpoint for code validation and session cookie creation | API Route, Session Utility (iron-session), Cookie Logic |
+| ☐ | 9. Build the `/[locale]/verify` page with email display, edit email functionality, and resend code button (30s cooldown) | Client-side state management, Error Handling |
+| ☐ | 10. Implement `/api/resend-code` endpoint with cooldown validation using `code_sent_at` | API Route, Cooldown Logic, SES |
+| ☐ | 11. Implement a middleware/wrapper function to check for a valid session cookie on protected routes | Next.js Middleware/HOC |
 
-| **TOTAL ESTIMATED IMPLEMENTATION TIME:** | **35 Hours (Approx. 4-5 Days)** |
+## Phase 3: Group & Invitation Logic
+
+| Status | Task | Next.js / Tech Focus |
+|:------:|------|---------------------|
+| ☐ | 12. Implement `/api/group/create` (Admin-only, authenticated) with `name`, `date`, `place`, `budget` fields and generate unique `invite_id` | `Group` CRUD, Session Guard |
+| ☐ | 13. Build the `/[locale]/join` page to validate `inviteId` and collect Name (single field) and Email | `Group` lookup, Frontend form |
+| ☐ | 14. Implement `/api/group/join` to create a new `Participant` with `code_sent_at` tracking and send verification code/link | `Participant` CRUD, SES, `invite_id` validation |
+| ☐ | 15. Build the Group Owner Dashboard (`/[locale]/group/[groupId]`) with participant list and group metadata | Protected Route, Data Fetching |
+| ☐ | 16. Add invitation link with copy button and WhatsApp share button (`wa.me/?text=...`) to owner dashboard | Frontend, Clipboard API, URL encoding |
+| ☐ | 17. Implement email invitation feature: form to send invitations and list of sent emails (from `invitations_sent`) | Frontend form, State management |
+| ☐ | 18. Implement `/api/group/send-invitation` endpoint with duplicate check and tracking in `invitations_sent` array | API Route, `Group` update, SES |
+
+## Phase 4: Lottery & Final Assignment
+
+| Status | Task | Next.js / Tech Focus |
+|:------:|------|---------------------|
+| ☐ | 19. Implement the `/api/lottery/run` endpoint with no-self-draw algorithm and owner permission check | API Route, Algorithm Implementation |
+| ☐ | 20. Update `Participant.recipient_id` and send assignment emails with `assignment_email_status` and `assignment_email_sent_at` tracking | MongoDB Update, SES Email Template |
+| ☐ | 21. Build the Participant Dashboard (`/[locale]/group/[groupId]/dashboard`) to display the assigned recipient name | Protected Route, `Participant.recipient_id` lookup |
+| ☐ | 22. Add email delivery status table to owner dashboard (participant name + status color-coded) | Frontend table, Status indicators |
+
+## Phase 5: Email Delivery Tracking & Polish
+
+| Status | Task | Next.js / Tech Focus |
+|:------:|------|---------------------|
+| ☐ | 23. Configure AWS SES to publish notifications to SNS topic | AWS Console, SNS Topic setup |
+| ☐ | 24. Create SQS queue and subscribe to SNS topic for delivery/bounce/complaint notifications | AWS Console, SQS setup |
+| ☐ | 25. Implement `/api/webhooks/ses-notifications` endpoint to process SQS messages and update `assignment_email_status` | API Route, SQS Client, Status updates |
+| ☐ | 26. Set up polling or Lambda trigger to process SQS queue messages | AWS Lambda or Cron job |
+| ☐ | 27. Final i18n review and component styling (Shadcn finalization) | i18n Text files, Styling Tweaks |

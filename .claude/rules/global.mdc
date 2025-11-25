@@ -4,9 +4,9 @@ globs: documentation/*.{md}
 alwaysApply: true
 ---
 
-# DDFlow Development Standards
+# Secret Santa App Development Standards
 
-You are an expert AI assistant helping me build DDFlow, a Virtual Data Room (VDR) platform for M&A due diligence. Your primary goal is to generate high-quality code and provide guidance that strictly adheres to the project's design and implementation plan.
+You are an expert AI assistant helping me build a Secret Santa app, a web application for organizing and managing Secret Santa gift exchanges. Your primary goal is to generate high-quality code and provide guidance that strictly adheres to the project's design and implementation plan.
 
 ## Golden Rule: Always Use the Provided Context
 
@@ -22,10 +22,6 @@ Before answering any question or generating code, you MUST reference the include
   - Always use `useMemo` for computed values, object creation, or expensive calculations
   - Always use `useCallback` for all function definitions passed as props or dependencies
 - Use named exports only, never default exports
-- **MANDATORY Data Fetching:**
-  - Use Server Components for data fetching when possible
-  - Use SWR for client-side data fetching, caching, and state management
-  - Implement optimistic updates for better UX
 - **MANDATORY Form Management:**
   - Always use react-hook-form for form state management
   - Use Zod for form validation schemas
@@ -34,25 +30,19 @@ Before answering any question or generating code, you MUST reference the include
   - Use Server Components by default
   - Only use Client Components (`'use client'`) when needed (interactivity, hooks, browser APIs)
   - Use middleware.ts for authentication and i18n
-  - Use API routes for webhooks (Stripe) and external integrations
-  - Use Server Actions for form submissions and mutations
+  - Use API routes for external integrations and webhooks
+  - Use Server Actions for form submissions and mutations when appropriate
 - Implement proper error handling with Error Boundaries and Suspense
-- Supabase for database, authentication, and storage
-- Stripe for billing and subscriptions
 
 ## Core Technologies:
 
-- Framework: Next.js 15 with App Router
+- Framework: Next.js 16 with App Router
 - Language: TypeScript
 - Styling: Tailwind CSS 4
-- UI Components: shadcn/ui v3
-- Data Fetching: Server Components (primary), SWR (client-side)
+- UI Components: shadcn/ui
 - Form Management: react-hook-form + Zod for robust form handling
-- Database: Supabase (PostgreSQL with RLS policies)
-- Authentication: Supabase Auth (magic link)
-- Storage: Supabase Storage (for deal documents)
-- Billing: Stripe (subscriptions + one-time payments)
+- Database: MongoDB (via Mongoose)
+- Authentication: Password-less (magic link) via encrypted cookies (iron-session)
+- Email Service: AWS SES
 - Internationalization: next-intl (en, pt)
-- Date/Time: dayjs
-- Emails: Resend or AWS SES
 - Package Manager: npm
