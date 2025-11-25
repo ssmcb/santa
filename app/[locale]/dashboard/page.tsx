@@ -1,7 +1,7 @@
-import { redirect } from 'next/navigation';
 import { getAuthenticatedParticipant } from '@/lib/auth';
 import { connectDB } from '@/lib/db/mongodb';
 import { Group } from '@/lib/db/models/Group';
+import { Participant } from '@/lib/db/models/Participant';
 import { DashboardContent } from './DashboardContent';
 
 type DashboardPageProps = {
@@ -14,20 +14,49 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
 
   await connectDB();
 
-  // Check if participant has a group
-  if (participant.group_id) {
-    // Redirect to group dashboard
-    redirect(`/${locale}/group/${participant.group_id}/dashboard`);
-  }
-
-  // Check if participant is the admin (owner)
+  // Find all groups where the user is the owner
   const ownedGroups = await Group.find({ owner_email: participant.email });
 
-  if (ownedGroups.length > 0) {
-    // Redirect to the first owned group
-    redirect(`/${locale}/group/${ownedGroups[0]._id}/dashboard`);
+  // Find all groups where the user is a participant
+  const participantRecords = await Participant.find({
+    email: participant.email,
+    group_id: { $ne: null },
+  });
+
+  const participantGroupIds = participantRecords.map((p) => p.group_id);
+  const participatingGroups = await Group.find({
+    _id: { $in: participantGroupIds },
+    owner_email: { $ne: participant.email }, // Exclude owned groups
+  });
+
+  const allGroups = [
+    ...ownedGroups.map((g) => ({
+      id: g._id.toString(),
+      name: g.name,
+      date: g.date.toISOString(),
+      place: g.place,
+      budget: g.budget,
+      isOwner: true,
+      isDrawn: g.is_drawn,
+      participantCount: 0, // Will be populated
+    })),
+    ...participatingGroups.map((g) => ({
+      id: g._id.toString(),
+      name: g.name,
+      date: g.date.toISOString(),
+      place: g.place,
+      budget: g.budget,
+      isOwner: false,
+      isDrawn: g.is_drawn,
+      participantCount: 0, // Will be populated
+    })),
+  ];
+
+  // Get participant counts for each group
+  for (const group of allGroups) {
+    const count = await Participant.countDocuments({ group_id: group.id });
+    group.participantCount = count;
   }
 
-  // No group yet, show create group option
-  return <DashboardContent locale={locale} participantName={participant.name} />;
+  return <DashboardContent locale={locale} participantName={participant.name} groups={allGroups} />;
 }
