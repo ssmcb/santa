@@ -84,6 +84,12 @@
     "reveal": "Revelar Atribuição",
     "yourSecretSanta": "Seu Amigo Secreto é:",
     "lotteryComplete": "Sorteio concluído com sucesso",
-    "assignmentEmailSent": "E-mails de atribuição enviados a todos os participantes"
+    "assignmentEmailSent": "E-mails de atribuição enviados a todos os participantes",
+    "confirmRunTitle": "Realizar o Sorteio?",
+    "confirmRunDescription": "Isso vai atribuir aleatoriamente os pares de Amigo Secreto e enviar e-mails a todos os participantes. Esta ação não pode ser desfeita (mas você pode anulá-la depois se necessário).",
+    "voidLottery": "Anular Sorteio",
+    "confirmVoidTitle": "Anular o Sorteio?",
+    "confirmVoidDescription": "Isso vai redefinir todas as atribuições e permitir que você adicione mais participantes e realize o sorteio novamente. Os participantes NÃO serão notificados desta mudança.",
+    "lotteryVoidedSuccess": "Sorteio foi anulado. Você pode agora adicionar mais participantes e realizar o sorteio novamente."
   }
 }

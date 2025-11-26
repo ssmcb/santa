@@ -84,6 +84,12 @@
     "reveal": "Reveal Assignment",
     "yourSecretSanta": "Your Secret Santa is:",
     "lotteryComplete": "Lottery completed successfully",
-    "assignmentEmailSent": "Assignment emails sent to all participants"
+    "assignmentEmailSent": "Assignment emails sent to all participants",
+    "confirmRunTitle": "Run the Lottery?",
+    "confirmRunDescription": "This will randomly assign Secret Santa pairs and send emails to all participants. This action cannot be undone (but you can void it later if needed).",
+    "voidLottery": "Void Lottery",
+    "confirmVoidTitle": "Void the Lottery?",
+    "confirmVoidDescription": "This will reset all assignments and allow you to add more participants and run the lottery again. Participants will NOT be notified of this change.",
+    "lotteryVoidedSuccess": "Lottery has been voided. You can now add more participants and run the lottery again."
   }
 }

@@ -25,6 +25,14 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
   Calendar,
   MapPin,
   DollarSign,
@@ -35,6 +43,7 @@ import {
   Trash2,
   Save,
   X,
+  RotateCcw,
 } from 'lucide-react';
 
 type Group = {
@@ -80,11 +89,14 @@ export const GroupDashboard = React.memo(
     const [inviteEmail, setInviteEmail] = useState('');
     const [isSendingInvite, setIsSendingInvite] = useState(false);
     const [isRunningLottery, setIsRunningLottery] = useState(false);
+    const [isVoidingLottery, setIsVoidingLottery] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
     const [showInvitationsSent, setShowInvitationsSent] = useState(false);
     const [isEditingGroup, setIsEditingGroup] = useState(false);
     const [isSavingGroup, setIsSavingGroup] = useState(false);
+    const [showRunLotteryDialog, setShowRunLotteryDialog] = useState(false);
+    const [showVoidLotteryDialog, setShowVoidLotteryDialog] = useState(false);
 
     // Helper to format date for input (YYYY-MM-DD)
     const formatDateForInput = useCallback((dateString: string) => {
@@ -164,6 +176,7 @@ export const GroupDashboard = React.memo(
       setIsRunningLottery(true);
       setError(null);
       setSuccess(null);
+      setShowRunLotteryDialog(false);
 
       try {
         const response = await fetch('/api/lottery/run', {
@@ -186,6 +199,34 @@ export const GroupDashboard = React.memo(
         setIsRunningLottery(false);
       }
     }, [group.id, locale, router, tLottery, tCommon]);
+
+    const handleVoidLottery = useCallback(async () => {
+      setIsVoidingLottery(true);
+      setError(null);
+      setSuccess(null);
+      setShowVoidLotteryDialog(false);
+
+      try {
+        const response = await fetch('/api/lottery/void', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ groupId: group.id }),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.error || 'Failed to void lottery');
+        }
+
+        setSuccess(tLottery('lotteryVoidedSuccess'));
+        router.refresh();
+      } catch (err) {
+        setError(err instanceof Error ? err.message : tCommon('error'));
+      } finally {
+        setIsVoidingLottery(false);
+      }
+    }, [group.id, router, tLottery, tCommon]);
 
     const handleSaveGroup = useCallback(async () => {
       setIsSavingGroup(true);
@@ -514,11 +555,22 @@ export const GroupDashboard = React.memo(
                     </div>
                     {!group.isDrawn && participants.length >= 3 && (
                       <Button
-                        onClick={handleRunLottery}
+                        onClick={() => setShowRunLotteryDialog(true)}
                         disabled={isRunningLottery}
                         className="w-full md:w-auto"
                       >
                         {isRunningLottery ? tCommon('loading') : t('runLottery')}
+                      </Button>
+                    )}
+                    {group.isDrawn && (
+                      <Button
+                        onClick={() => setShowVoidLotteryDialog(true)}
+                        disabled={isVoidingLottery}
+                        variant="destructive"
+                        className="w-full md:w-auto"
+                      >
+                        <RotateCcw className="w-4 h-4 mr-2" />
+                        {isVoidingLottery ? tCommon('loading') : tLottery('voidLottery')}
                       </Button>
                     )}
                   </div>
@@ -593,6 +645,42 @@ export const GroupDashboard = React.memo(
             </div>
           )}
         </div>
+
+        {/* Run Lottery Confirmation Dialog */}
+        <Dialog open={showRunLotteryDialog} onOpenChange={setShowRunLotteryDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{tLottery('confirmRunTitle')}</DialogTitle>
+              <DialogDescription>{tLottery('confirmRunDescription')}</DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowRunLotteryDialog(false)}>
+                {tCommon('cancel')}
+              </Button>
+              <Button onClick={handleRunLottery} disabled={isRunningLottery}>
+                {isRunningLottery ? tCommon('loading') : tCommon('continue')}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Void Lottery Confirmation Dialog */}
+        <Dialog open={showVoidLotteryDialog} onOpenChange={setShowVoidLotteryDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{tLottery('confirmVoidTitle')}</DialogTitle>
+              <DialogDescription>{tLottery('confirmVoidDescription')}</DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowVoidLotteryDialog(false)}>
+                {tCommon('cancel')}
+              </Button>
+              <Button variant="destructive" onClick={handleVoidLottery} disabled={isVoidingLottery}>
+                {isVoidingLottery ? tCommon('loading') : tCommon('continue')}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     );
   }
