@@ -235,11 +235,61 @@ The app can be deployed to any platform supporting Next.js:
 - Check cookies are enabled in browser
 - Try clearing browser cache/cookies
 
+## 🔒 Security
+
+This application has been designed with security best practices in mind. However, please review and follow these guidelines when deploying:
+
+### Before Deployment
+
+**CRITICAL - Must Do:**
+
+1. **Never commit secrets**: Ensure `.env` is in `.gitignore` and use `.env.example` for documentation
+2. **Rotate credentials**: If this is a fork/clone, generate new credentials for:
+   - `SESSION_SECRET` (use `openssl rand -base64 32`)
+   - MongoDB credentials
+   - AWS access keys
+   - `WEBHOOK_SECRET` (if using SQS notifications)
+3. **Check git history**: Verify no secrets were accidentally committed
+   ```bash
+   git log --all --full-history -- .env
+   ```
+
+**RECOMMENDED:**
+
+4. **Configure allowed origins**: Update `NEXT_PUBLIC_APP_URL` in production for CORS
+5. **Enable security monitoring**: Use GitHub Dependabot for automatic security updates
+6. **Review AWS permissions**: Use minimal IAM permissions (SES send only, SQS receive only)
+7. **Use HTTPS**: Always deploy with SSL/TLS certificates
+
+### Security Features
+
+- **Encrypted sessions**: Uses iron-session for tamper-proof authentication
+- **Input validation**: All API endpoints validate input with Zod schemas
+- **No passwords**: Passwordless authentication reduces attack surface
+- **Security headers**: X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy
+- **CORS protection**: API routes restricted to configured origin
+- **Webhook authentication**: Required Bearer token for webhook endpoints
+- **Rate limiting**: Built-in request throttling on sensitive endpoints
+
+### Reporting Vulnerabilities
+
+Found a security issue? Please see [SECURITY.md](./SECURITY.md) for responsible disclosure guidelines.
+
+### Best Practices
+
+- **MongoDB**: Use connection string with authentication, restrict network access
+- **AWS SES**: Keep in sandbox mode for testing, request production access only when needed
+- **Session Secret**: Use cryptographically random string, never reuse across environments
+- **Environment Variables**: Never log or expose in error messages
+- **Dependencies**: Regularly update packages to patch known vulnerabilities
+
 ## 📚 Documentation
 
 - [Technical Design](./documentation/design.md)
 - [Implementation Timeline](./documentation/timeline.md)
 - [AWS Setup Guide](./documentation/aws-setup.md)
+- [Security Policy](./SECURITY.md)
+- [Security Audit](./SECURITY_AUDIT.md)
 
 ## 🤝 Contributing
 

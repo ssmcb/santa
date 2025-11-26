@@ -19,11 +19,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Optional: Add a secret token for security
+    // Require webhook secret for security
     const authHeader = request.headers.get('authorization');
     const expectedToken = process.env.WEBHOOK_SECRET;
 
-    if (expectedToken && authHeader !== `Bearer ${expectedToken}`) {
+    if (!expectedToken) {
+      return NextResponse.json({ error: 'WEBHOOK_SECRET not configured' }, { status: 500 });
+    }
+
+    if (authHeader !== `Bearer ${expectedToken}`) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
