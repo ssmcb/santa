@@ -301,4 +301,4 @@ MIT License - feel free to use this code for your own Secret Santa events!
 
 ## 🎄 Happy Holidays!
 
-Built with ❤️ using Next.js, TypeScript, and modern web technologies
+Built with ❤️ using Next.js, TypeScript, and modern web technologies.
