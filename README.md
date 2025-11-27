@@ -1,5 +1,10 @@
 # 🎅 Secret Santa App
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-green)](https://www.mongodb.com/)
+
 A modern, full-stack Secret Santa application built with Next.js 16, supporting multiple languages and automated email notifications.
 
 ## ✨ Features
@@ -293,11 +298,29 @@ Found a security issue? Please see [SECURITY.md](./SECURITY.md) for responsible 
 
 ## 🤝 Contributing
 
-This is a personal project, but suggestions and bug reports are welcome!
+Contributions are welcome! Please read our [Contributing Guidelines](./CONTRIBUTING.md) and [Code of Conduct](./CODE_OF_CONDUCT.md) before submitting PRs.
+
+### How to Contribute
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Run tests: `npm run check`
+5. Commit your changes (`git commit -m 'Add amazing feature'`)
+6. Push to your branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
+
+For more details, see [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+### Reporting Issues
+
+- **Bug Reports**: Use the [bug report template](.github/ISSUE_TEMPLATE/bug_report.md)
+- **Feature Requests**: Use the [feature request template](.github/ISSUE_TEMPLATE/feature_request.md)
+- **Security Issues**: See [SECURITY.md](./SECURITY.md) for responsible disclosure
 
 ## 📄 License
 
-MIT License - feel free to use this code for your own Secret Santa events!
+MIT License - see the [LICENSE](./LICENSE) file for details.
 
 ## 🎄 Happy Holidays!
 
