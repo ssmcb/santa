@@ -8,7 +8,7 @@ import { validateCSRF } from '@/lib/middleware/csrf';
 import { z } from 'zod';
 
 const signupSchema = z.object({
-  name: z.string().min(1),
+  name: z.string().optional(),
   email: z.string().email(),
 });
 
@@ -35,6 +35,11 @@ export async function POST(request: NextRequest) {
       const codeExpiresAt = getCodeExpiration();
       const codeSentAt = new Date();
 
+      // Update name if provided
+      if (name && name.trim().length > 0) {
+        existingParticipant.name = name;
+      }
+
       existingParticipant.verification_code = verificationCode;
       existingParticipant.code_expires_at = codeExpiresAt;
       existingParticipant.code_sent_at = codeSentAt;
@@ -49,7 +54,7 @@ export async function POST(request: NextRequest) {
 
       // Send verification email
       const emailTemplate = getVerificationEmailTemplate({
-        name,
+        name: existingParticipant.name || email.split('@')[0],
         verificationCode,
         verificationUrl,
         locale,
@@ -75,9 +80,9 @@ export async function POST(request: NextRequest) {
     const codeSentAt = new Date();
 
     // Create a participant record (no group yet - they'll create one after verification)
-    await Participant.create({
+    const newParticipant = await Participant.create({
       group_id: null,
-      name,
+      name: name || '',
       email: email.toLowerCase(),
       verification_code: verificationCode,
       code_expires_at: codeExpiresAt,
@@ -93,7 +98,7 @@ export async function POST(request: NextRequest) {
 
     // Send verification email
     const emailTemplate = getVerificationEmailTemplate({
-      name,
+      name: newParticipant.name || email.split('@')[0],
       verificationCode,
       verificationUrl,
       locale,

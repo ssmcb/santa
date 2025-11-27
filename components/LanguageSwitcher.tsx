@@ -14,6 +14,7 @@ import { Globe, Check } from 'lucide-react';
 const languages = [
   { code: 'en', label: 'English', short: 'EN' },
   { code: 'pt', label: 'Português', short: 'PT' },
+  { code: 'es', label: 'Español', short: 'ES' },
 ] as const;
 
 export const LanguageSwitcher = React.memo(() => {
