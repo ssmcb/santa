@@ -1,9 +1,5 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
-
-export type InvitationSent = {
-  email: string;
-  sent_at: Date;
-};
+import { InvitationSent } from '@/types/shared';
 
 export type GroupDocument = Document & {
   name: string;

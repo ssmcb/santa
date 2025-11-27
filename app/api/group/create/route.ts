@@ -36,11 +36,15 @@ export async function POST(request: NextRequest) {
     // Generate unique invite ID
     const inviteId = nanoid(16);
 
+    // Parse date and store at noon UTC to avoid timezone issues with date-only values
+    const [year, month, day] = date.split('-').map(Number);
+    const eventDate = new Date(Date.UTC(year, month - 1, day, 12, 0, 0));
+
     // Create the group
     const group = await Group.create({
       name,
       budget,
-      date: new Date(date),
+      date: eventDate,
       place,
       owner_email: ownerEmail.toLowerCase(),
       participants: [participant._id],

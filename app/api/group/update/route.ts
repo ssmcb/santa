@@ -48,7 +48,9 @@ export async function PUT(request: NextRequest) {
 
     // Update the group
     group.name = name;
-    group.date = new Date(date);
+    // Store date at noon UTC to avoid timezone issues with date-only values
+    const [year, month, day] = date.split('-').map(Number);
+    group.date = new Date(Date.UTC(year, month - 1, day, 12, 0, 0));
     group.place = place;
     group.budget = budget;
     await group.save();
