@@ -3,6 +3,7 @@ import { connectDB } from '@/lib/db/mongodb';
 import { Group } from '@/lib/db/models/Group';
 import { Participant, ParticipantDocument } from '@/lib/db/models/Participant';
 import { getSession } from '@/lib/session';
+import { validateCSRF } from '@/lib/middleware/csrf';
 import { runSecretSantaLottery, validateLotteryAssignments } from '@/lib/utils/lottery';
 import { sendEmail } from '@/lib/email/ses';
 import { getAssignmentEmailTemplate } from '@/lib/email/templates';
@@ -15,6 +16,10 @@ const runLotterySchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    // Validate CSRF token
+    const csrfError = await validateCSRF(request);
+    if (csrfError) return csrfError;
+
     // Check authentication
     const session = await getSession();
     if (!session.isLoggedIn || !session.participantId) {

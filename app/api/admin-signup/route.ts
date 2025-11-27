@@ -4,6 +4,7 @@ import { Participant } from '@/lib/db/models/Participant';
 import { generateVerificationCode, getCodeExpiration } from '@/lib/utils/verification';
 import { sendEmail } from '@/lib/email/ses';
 import { getVerificationEmailTemplate } from '@/lib/email/templates';
+import { validateCSRF } from '@/lib/middleware/csrf';
 import { z } from 'zod';
 
 const signupSchema = z.object({
@@ -13,6 +14,10 @@ const signupSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    // Validate CSRF token
+    const csrfError = await validateCSRF(request);
+    if (csrfError) return csrfError;
+
     const body = await request.json();
     const { name, email } = signupSchema.parse(body);
 

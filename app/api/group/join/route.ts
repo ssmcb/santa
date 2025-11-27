@@ -5,6 +5,7 @@ import { Participant } from '@/lib/db/models/Participant';
 import { generateVerificationCode, getCodeExpiration } from '@/lib/utils/verification';
 import { sendEmail } from '@/lib/email/ses';
 import { getVerificationEmailTemplate } from '@/lib/email/templates';
+import { validateCSRF } from '@/lib/middleware/csrf';
 import { z } from 'zod';
 
 const joinGroupSchema = z.object({
@@ -15,6 +16,10 @@ const joinGroupSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    // Validate CSRF token
+    const csrfError = await validateCSRF(request);
+    if (csrfError) return csrfError;
+
     const body = await request.json();
     const { name, email, inviteId } = joinGroupSchema.parse(body);
 

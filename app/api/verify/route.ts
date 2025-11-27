@@ -2,10 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db/mongodb';
 import { Participant } from '@/lib/db/models/Participant';
 import { getSession } from '@/lib/session';
+import { validateCSRF } from '@/lib/middleware/csrf';
 import { isCodeExpired } from '@/lib/utils/verification';
 
 export async function POST(request: NextRequest) {
   try {
+    // Validate CSRF token
+    const csrfError = await validateCSRF(request);
+    if (csrfError) return csrfError;
+
     const { email, code } = await request.json();
 
     if (!email || !code) {

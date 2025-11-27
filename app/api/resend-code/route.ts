@@ -9,9 +9,14 @@ import {
 } from '@/lib/utils/verification';
 import { sendEmail } from '@/lib/email/ses';
 import { getVerificationEmailTemplate } from '@/lib/email/templates';
+import { validateCSRF } from '@/lib/middleware/csrf';
 
 export async function POST(request: NextRequest) {
   try {
+    // Validate CSRF token
+    const csrfError = await validateCSRF(request);
+    if (csrfError) return csrfError;
+
     const { email } = await request.json();
 
     if (!email) {

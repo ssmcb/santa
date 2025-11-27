@@ -3,6 +3,7 @@ import { connectDB } from '@/lib/db/mongodb';
 import { Group } from '@/lib/db/models/Group';
 import { Participant } from '@/lib/db/models/Participant';
 import { getSession } from '@/lib/session';
+import { validateCSRF } from '@/lib/middleware/csrf';
 import { nanoid } from 'nanoid';
 import { z } from 'zod';
 
@@ -16,6 +17,10 @@ const createGroupSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    // Validate CSRF token
+    const csrfError = await validateCSRF(request);
+    if (csrfError) return csrfError;
+
     // Check authentication
     const session = await getSession();
     if (!session.isLoggedIn || !session.participantId) {

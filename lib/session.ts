@@ -4,6 +4,7 @@ import { cookies } from 'next/headers';
 export type SessionData = {
   participantId?: string;
   isLoggedIn: boolean;
+  csrfToken?: string;
 };
 
 if (!process.env.SESSION_SECRET) {
