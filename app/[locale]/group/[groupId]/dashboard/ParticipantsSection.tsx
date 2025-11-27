@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, memo } from 'react';
+import { useCallback, memo } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,6 +22,7 @@ export type ParticipantsSectionProps = {
     recipientId: string | null;
   };
   onRemoveParticipant: (participantId: string) => Promise<void>;
+  onResendEmail?: (participantId: string) => Promise<void>;
   onRunLottery: () => void;
   onVoidLottery: () => void;
   isRunningLottery: boolean;
@@ -33,6 +34,7 @@ export const ParticipantsSection = memo(function ParticipantsSection({
   participants,
   currentParticipant,
   onRemoveParticipant,
+  onResendEmail,
   onRunLottery,
   onVoidLottery,
   isRunningLottery,
@@ -110,6 +112,7 @@ export const ParticipantsSection = memo(function ParticipantsSection({
                     isDrawn={group.isDrawn}
                     isCurrentUser={participant.email === currentParticipant.email}
                     onRemove={onRemoveParticipant}
+                    onResendEmail={onResendEmail}
                     getStatusBadge={getStatusBadge}
                     removeButtonTitle={t('removeParticipant')}
                   />

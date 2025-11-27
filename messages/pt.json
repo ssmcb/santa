@@ -65,7 +65,8 @@
     "groupUpdatedSuccess": "Grupo atualizado com sucesso!",
     "removeParticipant": "Remover",
     "confirmRemoveParticipant": "Tem certeza que deseja remover este participante?",
-    "participantRemovedSuccess": "Participante removido com sucesso!"
+    "participantRemovedSuccess": "Participante removido com sucesso!",
+    "emailResentSuccess": "E-mail de atribuição reenviado com sucesso!"
   },
   "participants": {
     "name": "Nome",
@@ -77,7 +78,8 @@
     "delivered": "Entregue",
     "sent": "Enviado",
     "bounced": "Rejeitado",
-    "failed": "Falhou"
+    "failed": "Falhou",
+    "resendEmail": "Reenviar e-mail de atribuição"
   },
   "lottery": {
     "run": "Realizar Sorteio",

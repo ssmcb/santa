@@ -33,7 +33,6 @@ const ParticipantSchema = new Schema<ParticipantDocument>(
       required: true,
       lowercase: true,
       trim: true,
-      index: true,
     },
     recipient_id: {
       type: Schema.Types.ObjectId,

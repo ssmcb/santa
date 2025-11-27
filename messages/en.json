@@ -65,7 +65,8 @@
     "groupUpdatedSuccess": "Group updated successfully!",
     "removeParticipant": "Remove",
     "confirmRemoveParticipant": "Are you sure you want to remove this participant?",
-    "participantRemovedSuccess": "Participant removed successfully!"
+    "participantRemovedSuccess": "Participant removed successfully!",
+    "emailResentSuccess": "Assignment email resent successfully!"
   },
   "participants": {
     "name": "Name",
@@ -77,7 +78,8 @@
     "delivered": "Delivered",
     "sent": "Sent",
     "bounced": "Bounced",
-    "failed": "Failed"
+    "failed": "Failed",
+    "resendEmail": "Resend assignment email"
   },
   "lottery": {
     "run": "Run Lottery",

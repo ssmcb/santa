@@ -1,5 +1,9 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
-import { InvitationSent } from '@/types/shared';
+
+type InvitationSentDB = {
+  email: string;
+  sentAt: Date;
+};
 
 export type GroupDocument = Document & {
   name: string;
@@ -10,7 +14,7 @@ export type GroupDocument = Document & {
   participants: mongoose.Types.ObjectId[];
   invite_id: string;
   is_drawn: boolean;
-  invitations_sent: InvitationSent[];
+  invitations_sent: InvitationSentDB[];
 };
 
 const GroupSchema = new Schema<GroupDocument>(
@@ -50,7 +54,6 @@ const GroupSchema = new Schema<GroupDocument>(
       type: String,
       required: true,
       unique: true,
-      index: true,
     },
     is_drawn: {
       type: Boolean,
@@ -64,7 +67,7 @@ const GroupSchema = new Schema<GroupDocument>(
           lowercase: true,
           trim: true,
         },
-        sent_at: {
+        sentAt: {
           type: Date,
           required: true,
           default: Date.now,
@@ -77,7 +80,6 @@ const GroupSchema = new Schema<GroupDocument>(
   }
 );
 
-GroupSchema.index({ invite_id: 1 });
 GroupSchema.index({ owner_email: 1 });
 
 export const Group: Model<GroupDocument> =

@@ -138,7 +138,7 @@ ${isPortuguese ? 'Clique no link para entrar:' : 'Click the link to join:'} ${in
     // Add to invitations_sent array
     group.invitations_sent.push({
       email: recipientEmail.toLowerCase(),
-      sent_at: new Date(),
+      sentAt: new Date(),
     });
     await group.save();
 

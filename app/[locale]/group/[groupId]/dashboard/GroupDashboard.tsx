@@ -241,6 +241,37 @@ export const GroupDashboard = memo(
       [group.id, router, t, tCommon]
     );
 
+    const handleResendEmail = useCallback(
+      async (participantId: string) => {
+        setError(null);
+        setSuccess(null);
+
+        try {
+          const response = await fetch('/api/lottery/resend-assignment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              groupId: group.id,
+              participantId,
+              locale,
+            }),
+          });
+
+          const result = await response.json();
+
+          if (!response.ok) {
+            throw new Error(result.error || 'Failed to resend email');
+          }
+
+          setSuccess(t('emailResentSuccess'));
+          router.refresh();
+        } catch (err) {
+          setError(err instanceof Error ? err.message : tCommon('error'));
+        }
+      },
+      [group.id, locale, router, t, tCommon]
+    );
+
     return (
       <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-4 md:p-8">
         <div className="max-w-6xl mx-auto space-y-6">
@@ -290,6 +321,7 @@ export const GroupDashboard = memo(
                 isOwner={isOwner}
                 currentParticipant={currentParticipant}
                 onRemoveParticipant={handleRemoveParticipant}
+                onResendEmail={handleResendEmail}
                 onRunLottery={() => setShowRunLotteryDialog(true)}
                 onVoidLottery={() => setShowVoidLotteryDialog(true)}
                 isRunningLottery={isRunningLottery}
