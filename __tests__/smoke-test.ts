@@ -168,7 +168,7 @@ async function runSmokeTests() {
 }
 
 // Run the tests
-runSmokeTests().catch(error => {
+runSmokeTests().catch((error) => {
   console.error('\n❌ Smoke test failed with error:', error);
   process.exit(1);
 });

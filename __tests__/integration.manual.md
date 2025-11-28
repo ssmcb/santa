@@ -10,6 +10,7 @@ Since we're working with Next.js API routes and sessions, here's a manual test p
 ## Test 1: CSRF Protection Works
 
 ### Test Invalid CSRF Token (Should Fail)
+
 ```bash
 # Try to signup without CSRF token
 curl -X POST http://localhost:3011/api/admin-signup \
@@ -20,6 +21,7 @@ curl -X POST http://localhost:3011/api/admin-signup \
 ```
 
 ### Test Valid Flow (Should Succeed)
+
 1. Open browser to `http://localhost:3011/en/get-started`
 2. Open DevTools > Network tab
 3. Enter email and submit form
@@ -29,6 +31,7 @@ curl -X POST http://localhost:3011/api/admin-signup \
 ## Test 2: Rate Limiting on Signup
 
 ### Test IP-based Rate Limiting
+
 ```bash
 # Get CSRF token first (open browser, check cookies/session)
 # Then make 6 requests quickly:
@@ -48,6 +51,7 @@ done
 ```
 
 ### Test Email-based Rate Limiting
+
 ```bash
 # Make 4 requests with SAME email (but different IPs if possible)
 for i in {1..4}; do
@@ -73,12 +77,14 @@ done
 ## Test 4: Rate Limiting on Group Operations
 
 ### Test Invitation Sending (10 per hour per user)
+
 1. Login and create a group
 2. Send 10 invitations quickly
 3. Try to send 11th invitation
 4. Should see rate limit error
 
 ### Test Lottery Running (3 per hour per group)
+
 1. Create a group with 3+ participants
 2. Run lottery
 3. Void lottery
@@ -140,16 +146,19 @@ curl -X POST http://localhost:3011/api/admin-signup \
 ## Troubleshooting
 
 ### Can't get CSRF token
+
 - Open browser DevTools > Application > Cookies
 - Look for session cookie
 - The CSRF token is managed by the `useCSRF` hook on the client
 
 ### Rate limits not resetting
+
 - Rate limits are in-memory and reset on server restart
 - Check that cleanup interval is running (every 10 minutes)
 - For testing, you may want to reduce time windows
 
 ### Can't test from curl
+
 - CSRF tokens are session-based
 - You'll need to:
   1. Get session cookie from browser

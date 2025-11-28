@@ -270,7 +270,7 @@ describe('Rate Limiting Edge Cases', () => {
     expect(result).toBeNull();
 
     // Wait 1.1 seconds
-    await new Promise(resolve => setTimeout(resolve, 1100));
+    await new Promise((resolve) => setTimeout(resolve, 1100));
 
     // Should allow new request after window expires
     const result2 = await rateLimit(request, {
@@ -296,8 +296,8 @@ describe('Rate Limiting Edge Cases', () => {
     const results = await Promise.all(promises);
 
     // First 5 should succeed, rest should fail
-    const allowed = results.filter(r => r === null).length;
-    const blocked = results.filter(r => r !== null).length;
+    const allowed = results.filter((r) => r === null).length;
+    const blocked = results.filter((r) => r !== null).length;
 
     expect(allowed).toBeLessThanOrEqual(5);
     expect(blocked).toBeGreaterThanOrEqual(5);

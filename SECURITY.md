@@ -130,11 +130,13 @@ To stay informed about security updates:
 ### Scaling Considerations
 
 The application uses in-memory rate limiting by default, which works well for:
+
 - Single-server deployments
 - Small to medium traffic
 - Development and testing
 
 For production deployments with multiple instances, consider:
+
 - Redis-based rate limiting (see `lib/middleware/rateLimit.ts`)
 - Shared session storage
 - Load balancer with sticky sessions
