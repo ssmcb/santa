@@ -324,4 +324,4 @@ MIT License - see the [LICENSE](./LICENSE) file for details.
 
 ## 🎄 Happy Holidays!
 
-Built with ❤️ using Next.js, TypeScript, and modern web technologies.
+Built with ❤️ using Next.js, TypeScript, and modern web technologies
