@@ -8,8 +8,9 @@
  */
 
 import { NextRequest } from 'next/server';
-import { rateLimit } from '@/lib/middleware/rateLimit';
+
 import { validateCSRF } from '@/lib/middleware/csrf';
+import { rateLimit } from '@/lib/middleware/rateLimit';
 
 // Mock Next.js request
 function createMockRequest(
@@ -285,7 +286,7 @@ describe('Rate Limiting Edge Cases', () => {
     const ip = '192.168.1.6';
 
     // Make 10 concurrent requests
-    const promises = Array.from({ length: 10 }, (_, i) => {
+    const promises = Array.from({ length: 10 }, (_, _i) => {
       const request = createMockRequest(url, {
         headers: { 'x-forwarded-for': ip },
       });
