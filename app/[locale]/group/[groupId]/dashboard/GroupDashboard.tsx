@@ -15,6 +15,7 @@ import { MyAssignmentCard } from './MyAssignmentCard';
 import { InvitationSection } from './InvitationSection';
 import { LotteryDialogs } from './LotteryDialogs';
 import { Group, Participant } from '@/types/shared';
+import { useCSRF } from '@/lib/hooks/useCSRF';
 
 dayjs.extend(localizedFormat);
 dayjs.extend(utc);
@@ -38,6 +39,7 @@ export const GroupDashboard = memo(
     const tLottery = useTranslations('lottery');
     const tCommon = useTranslations('common');
     const router = useRouter();
+    const { token: csrfToken } = useCSRF();
 
     const [isRunningLottery, setIsRunningLottery] = useState(false);
     const [isVoidingLottery, setIsVoidingLottery] = useState(false);
@@ -85,10 +87,18 @@ export const GroupDashboard = memo(
         setError(null);
         setSuccess(null);
 
+        if (!csrfToken) {
+          setError('CSRF token not available');
+          throw new Error('CSRF token not available');
+        }
+
         try {
           const response = await fetch('/api/group/send-invitation', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': csrfToken,
+            },
             body: JSON.stringify({
               groupId: group.id,
               recipientEmail: email,
@@ -109,7 +119,7 @@ export const GroupDashboard = memo(
           throw err;
         }
       },
-      [group.id, locale, router, t, tCommon]
+      [csrfToken, group.id, locale, router, t, tCommon]
     );
 
     const handleRunLottery = useCallback(async () => {
@@ -118,10 +128,19 @@ export const GroupDashboard = memo(
       setSuccess(null);
       setShowRunLotteryDialog(false);
 
+      if (!csrfToken) {
+        setError('CSRF token not available');
+        setIsRunningLottery(false);
+        return;
+      }
+
       try {
         const response = await fetch('/api/lottery/run', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': csrfToken,
+          },
           body: JSON.stringify({ groupId: group.id, locale }),
         });
 
@@ -138,7 +157,7 @@ export const GroupDashboard = memo(
       } finally {
         setIsRunningLottery(false);
       }
-    }, [group.id, locale, router, tLottery, tCommon]);
+    }, [csrfToken, group.id, locale, router, tLottery, tCommon]);
 
     const handleVoidLottery = useCallback(async () => {
       setIsVoidingLottery(true);
@@ -146,10 +165,19 @@ export const GroupDashboard = memo(
       setSuccess(null);
       setShowVoidLotteryDialog(false);
 
+      if (!csrfToken) {
+        setError('CSRF token not available');
+        setIsVoidingLottery(false);
+        return;
+      }
+
       try {
         const response = await fetch('/api/lottery/void', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': csrfToken,
+          },
           body: JSON.stringify({ groupId: group.id }),
         });
 
@@ -166,17 +194,26 @@ export const GroupDashboard = memo(
       } finally {
         setIsVoidingLottery(false);
       }
-    }, [group.id, router, tLottery, tCommon]);
+    }, [csrfToken, group.id, router, tLottery, tCommon]);
 
     const handleSaveGroup = useCallback(async () => {
       setIsSavingGroup(true);
       setError(null);
       setSuccess(null);
 
+      if (!csrfToken) {
+        setError('CSRF token not available');
+        setIsSavingGroup(false);
+        return;
+      }
+
       try {
         const response = await fetch('/api/group/update', {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': csrfToken,
+          },
           body: JSON.stringify({
             groupId: group.id,
             ...editedGroup,
@@ -197,7 +234,7 @@ export const GroupDashboard = memo(
       } finally {
         setIsSavingGroup(false);
       }
-    }, [group.id, editedGroup, router, t, tCommon]);
+    }, [csrfToken, group.id, editedGroup, router, t, tCommon]);
 
     const handleCancelEdit = useCallback(() => {
       setEditedGroup({
@@ -216,10 +253,18 @@ export const GroupDashboard = memo(
         setError(null);
         setSuccess(null);
 
+        if (!csrfToken) {
+          setError('CSRF token not available');
+          return;
+        }
+
         try {
           const response = await fetch('/api/group/remove-participant', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': csrfToken,
+            },
             body: JSON.stringify({
               groupId: group.id,
               participantId,
@@ -238,7 +283,7 @@ export const GroupDashboard = memo(
           setError(err instanceof Error ? err.message : tCommon('error'));
         }
       },
-      [group.id, router, t, tCommon]
+      [csrfToken, group.id, router, t, tCommon]
     );
 
     const handleResendEmail = useCallback(
@@ -246,10 +291,18 @@ export const GroupDashboard = memo(
         setError(null);
         setSuccess(null);
 
+        if (!csrfToken) {
+          setError('CSRF token not available');
+          return;
+        }
+
         try {
           const response = await fetch('/api/lottery/resend-assignment', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': csrfToken,
+            },
             body: JSON.stringify({
               groupId: group.id,
               participantId,
@@ -269,7 +322,7 @@ export const GroupDashboard = memo(
           setError(err instanceof Error ? err.message : tCommon('error'));
         }
       },
-      [group.id, locale, router, t, tCommon]
+      [csrfToken, group.id, locale, router, t, tCommon]
     );
 
     return (

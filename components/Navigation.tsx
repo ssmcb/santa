@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Gift } from 'lucide-react';
+import { useCSRF } from '@/lib/hooks/useCSRF';
 
 type NavigationProps = {
   isLoggedIn: boolean;
@@ -18,13 +19,19 @@ export const Navigation = memo(({ isLoggedIn }: NavigationProps) => {
   const params = useParams();
   const router = useRouter();
   const locale = params.locale as string;
+  const { token: csrfToken } = useCSRF();
   const [isSigningOut, setIsSigningOut] = useState(false);
 
   const handleSignOut = useCallback(async () => {
+    if (!csrfToken) return;
+
     setIsSigningOut(true);
     try {
       const response = await fetch('/api/auth/signout', {
         method: 'POST',
+        headers: {
+          'X-CSRF-Token': csrfToken,
+        },
       });
 
       if (response.ok) {
@@ -36,7 +43,7 @@ export const Navigation = memo(({ isLoggedIn }: NavigationProps) => {
     } finally {
       setIsSigningOut(false);
     }
-  }, [locale, router]);
+  }, [csrfToken, locale, router]);
 
   return (
     <nav className="border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">

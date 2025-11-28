@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Gift, Calendar, MapPin, DollarSign } from 'lucide-react';
+import { useCSRF } from '@/lib/hooks/useCSRF';
 
 const joinGroupSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -34,6 +35,7 @@ export const JoinGroupForm = React.memo(
     const tAuth = useTranslations('auth');
     const tCommon = useTranslations('common');
     const router = useRouter();
+    const { token: csrfToken } = useCSRF();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -50,10 +52,19 @@ export const JoinGroupForm = React.memo(
         setIsSubmitting(true);
         setError(null);
 
+        if (!csrfToken) {
+          setError('CSRF token not available');
+          setIsSubmitting(false);
+          return;
+        }
+
         try {
           const response = await fetch('/api/group/join', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': csrfToken,
+            },
             body: JSON.stringify({
               ...data,
               inviteId,
@@ -74,7 +85,7 @@ export const JoinGroupForm = React.memo(
           setIsSubmitting(false);
         }
       },
-      [locale, inviteId, router, tCommon]
+      [csrfToken, locale, inviteId, router, tCommon]
     );
 
     return (

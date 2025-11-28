@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Gift } from 'lucide-react';
+import { useCSRF } from '@/lib/hooks/useCSRF';
 
 const formSchema = z.object({
   name: z.string().optional(),
@@ -27,6 +28,7 @@ export const GetStartedForm = React.memo(({ locale }: GetStartedFormProps) => {
   const t = useTranslations('auth');
   const tCommon = useTranslations('common');
   const router = useRouter();
+  const { token: csrfToken } = useCSRF();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState<'email' | 'name'>('email');
@@ -45,6 +47,12 @@ export const GetStartedForm = React.memo(({ locale }: GetStartedFormProps) => {
     async (data: FormData) => {
       setIsSubmitting(true);
       setError(null);
+
+      if (!csrfToken) {
+        setError('CSRF token not available');
+        setIsSubmitting(false);
+        return;
+      }
 
       try {
         if (step === 'email') {
@@ -66,7 +74,10 @@ export const GetStartedForm = React.memo(({ locale }: GetStartedFormProps) => {
           // Either new user or existing user with name - proceed with signup/login
           const response = await fetch('/api/admin-signup', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': csrfToken,
+            },
             body: JSON.stringify({ email: data.email, name: '' }),
           });
 
@@ -88,7 +99,10 @@ export const GetStartedForm = React.memo(({ locale }: GetStartedFormProps) => {
 
           const response = await fetch('/api/admin-signup', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': csrfToken,
+            },
             body: JSON.stringify(data),
           });
 
@@ -107,7 +121,7 @@ export const GetStartedForm = React.memo(({ locale }: GetStartedFormProps) => {
         setIsSubmitting(false);
       }
     },
-    [step, locale, router, tCommon, setValue]
+    [csrfToken, step, locale, router, tCommon, setValue]
   );
 
   return (

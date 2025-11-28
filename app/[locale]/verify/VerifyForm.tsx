@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useCSRF } from '@/lib/hooks/useCSRF';
 
 const verifySchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -28,6 +29,7 @@ export const VerifyForm = React.memo(({ locale, initialEmail, initialCode }: Ver
   const t = useTranslations('auth');
   const tCommon = useTranslations('common');
   const router = useRouter();
+  const { token: csrfToken } = useCSRF();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResending, setIsResending] = useState(false);
@@ -56,10 +58,19 @@ export const VerifyForm = React.memo(({ locale, initialEmail, initialCode }: Ver
       setError(null);
       setSuccess(null);
 
+      if (!csrfToken) {
+        setError('CSRF token not available');
+        setIsSubmitting(false);
+        return;
+      }
+
       try {
         const response = await fetch('/api/verify', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': csrfToken,
+          },
           body: JSON.stringify(data),
         });
 
@@ -83,7 +94,7 @@ export const VerifyForm = React.memo(({ locale, initialEmail, initialCode }: Ver
         setIsSubmitting(false);
       }
     },
-    [locale, router, t, tCommon]
+    [csrfToken, locale, router, t, tCommon]
   );
 
   // Auto-submit if code is provided in URL
@@ -104,7 +115,7 @@ export const VerifyForm = React.memo(({ locale, initialEmail, initialCode }: Ver
   }, [cooldownSeconds]);
 
   const handleResendCode = useCallback(async () => {
-    if (cooldownSeconds > 0 || !email) return;
+    if (cooldownSeconds > 0 || !email || !csrfToken) return;
 
     setIsResending(true);
     setError(null);
@@ -113,7 +124,10 @@ export const VerifyForm = React.memo(({ locale, initialEmail, initialCode }: Ver
     try {
       const response = await fetch('/api/resend-code', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': csrfToken,
+        },
         body: JSON.stringify({ email }),
       });
 
@@ -133,7 +147,7 @@ export const VerifyForm = React.memo(({ locale, initialEmail, initialCode }: Ver
     } finally {
       setIsResending(false);
     }
-  }, [email, cooldownSeconds, t, tCommon]);
+  }, [csrfToken, email, cooldownSeconds, t, tCommon]);
 
   const resendButtonText = useMemo(() => {
     if (cooldownSeconds > 0) {

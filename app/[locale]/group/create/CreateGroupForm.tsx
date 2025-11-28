@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Gift } from 'lucide-react';
+import { useCSRF } from '@/lib/hooks/useCSRF';
 
 const createGroupSchema = z.object({
   name: z.string().min(1, 'Group name is required'),
@@ -30,6 +31,7 @@ export const CreateGroupForm = React.memo(({ locale, ownerEmail }: CreateGroupFo
   const t = useTranslations('groups');
   const tCommon = useTranslations('common');
   const router = useRouter();
+  const { token: csrfToken } = useCSRF();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -46,10 +48,19 @@ export const CreateGroupForm = React.memo(({ locale, ownerEmail }: CreateGroupFo
       setIsSubmitting(true);
       setError(null);
 
+      if (!csrfToken) {
+        setError('CSRF token not available');
+        setIsSubmitting(false);
+        return;
+      }
+
       try {
         const response = await fetch('/api/group/create', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': csrfToken,
+          },
           body: JSON.stringify({
             ...data,
             ownerEmail,
@@ -70,7 +81,7 @@ export const CreateGroupForm = React.memo(({ locale, ownerEmail }: CreateGroupFo
         setIsSubmitting(false);
       }
     },
-    [locale, ownerEmail, router, tCommon]
+    [csrfToken, locale, ownerEmail, router, tCommon]
   );
 
   return (
