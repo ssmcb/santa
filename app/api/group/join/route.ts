@@ -6,6 +6,7 @@ import { generateVerificationCode, getCodeExpiration } from '@/lib/utils/verific
 import { sendEmail } from '@/lib/email/ses';
 import { getVerificationEmailTemplate } from '@/lib/email/templates';
 import { validateCSRF } from '@/lib/middleware/csrf';
+import { rateLimit } from '@/lib/middleware/rateLimit';
 import { z } from 'zod';
 
 const joinGroupSchema = z.object({
@@ -19,6 +20,13 @@ export async function POST(request: NextRequest) {
     // Validate CSRF token
     const csrfError = await validateCSRF(request);
     if (csrfError) return csrfError;
+
+    // Rate limit: 5 join attempts per IP per 15 minutes
+    const rateLimitError = await rateLimit(request, {
+      max: 5,
+      windowSeconds: 15 * 60,
+    });
+    if (rateLimitError) return rateLimitError;
 
     const body = await request.json();
     const { name, email, inviteId } = joinGroupSchema.parse(body);

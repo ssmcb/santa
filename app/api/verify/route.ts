@@ -3,6 +3,7 @@ import { connectDB } from '@/lib/db/mongodb';
 import { Participant } from '@/lib/db/models/Participant';
 import { getSession } from '@/lib/session';
 import { validateCSRF } from '@/lib/middleware/csrf';
+import { rateLimit } from '@/lib/middleware/rateLimit';
 import { isCodeExpired } from '@/lib/utils/verification';
 
 export async function POST(request: NextRequest) {
@@ -11,7 +12,22 @@ export async function POST(request: NextRequest) {
     const csrfError = await validateCSRF(request);
     if (csrfError) return csrfError;
 
+    // Rate limit: 10 verification attempts per IP per 15 minutes
+    const ipRateLimitError = await rateLimit(request, {
+      max: 10,
+      windowSeconds: 15 * 60,
+    });
+    if (ipRateLimitError) return ipRateLimitError;
+
     const { email, code } = await request.json();
+
+    // Rate limit: 5 verification attempts per email per 15 minutes
+    const emailRateLimitError = await rateLimit(request, {
+      max: 5,
+      windowSeconds: 15 * 60,
+      keyGenerator: async () => (email ? `email:${email.toLowerCase()}` : null),
+    });
+    if (emailRateLimitError) return emailRateLimitError;
 
     if (!email || !code) {
       return NextResponse.json({ error: 'Email and code are required' }, { status: 400 });

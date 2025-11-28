@@ -4,6 +4,7 @@ import { Group } from '@/lib/db/models/Group';
 import { Participant, ParticipantDocument } from '@/lib/db/models/Participant';
 import { getSession } from '@/lib/session';
 import { validateCSRF } from '@/lib/middleware/csrf';
+import { rateLimit } from '@/lib/middleware/rateLimit';
 import { runSecretSantaLottery, validateLotteryAssignments } from '@/lib/utils/lottery';
 import { sendEmail } from '@/lib/email/ses';
 import { getAssignmentEmailTemplate } from '@/lib/email/templates';
@@ -19,6 +20,17 @@ export async function POST(request: NextRequest) {
     // Validate CSRF token
     const csrfError = await validateCSRF(request);
     if (csrfError) return csrfError;
+
+    // Rate limit: 3 lottery runs per group per hour
+    const rateLimitError = await rateLimit(request, {
+      max: 3,
+      windowSeconds: 60 * 60,
+      keyGenerator: async (req) => {
+        const body = await req.json();
+        return body.groupId ? `group:${body.groupId}:lottery` : null;
+      },
+    });
+    if (rateLimitError) return rateLimitError;
 
     // Check authentication
     const session = await getSession();

@@ -56,6 +56,18 @@ This application implements multiple security layers:
 - SNS signature verification
 - Rate limiting on email operations
 
+### Rate Limiting
+
+Comprehensive rate limiting protects against abuse and automated attacks:
+
+- **Signup**: 5 attempts per IP per 15 minutes, 3 per email per day
+- **Verification**: 10 attempts per IP per 15 minutes, 5 per email per 15 minutes
+- **Code Resend**: 30-second cooldown per email
+- **Group Join**: 5 attempts per IP per 15 minutes
+- **Send Invitation**: 10 invitations per user per hour
+- **Lottery Run**: 3 runs per group per hour
+- **In-memory storage**: Works out of the box, scales to Redis if needed
+
 ## Best Practices for Deployment
 
 ### Required Environment Variables
@@ -115,13 +127,17 @@ To stay informed about security updates:
 - Links expire after a set time period
 - One-time use verification tokens
 
-### Rate Limiting
+### Scaling Considerations
 
-Consider implementing rate limiting for:
+The application uses in-memory rate limiting by default, which works well for:
+- Single-server deployments
+- Small to medium traffic
+- Development and testing
 
-- Login attempts
-- Email sending
-- API endpoints
+For production deployments with multiple instances, consider:
+- Redis-based rate limiting (see `lib/middleware/rateLimit.ts`)
+- Shared session storage
+- Load balancer with sticky sessions
 
 ## Security Hall of Fame
 

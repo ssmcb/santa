@@ -5,6 +5,7 @@ import { generateVerificationCode, getCodeExpiration } from '@/lib/utils/verific
 import { sendEmail } from '@/lib/email/ses';
 import { getVerificationEmailTemplate } from '@/lib/email/templates';
 import { validateCSRF } from '@/lib/middleware/csrf';
+import { rateLimit, emailKeyGenerator } from '@/lib/middleware/rateLimit';
 import { z } from 'zod';
 
 const signupSchema = z.object({
@@ -18,8 +19,23 @@ export async function POST(request: NextRequest) {
     const csrfError = await validateCSRF(request);
     if (csrfError) return csrfError;
 
+    // Rate limit: 5 signups per IP per 15 minutes
+    const ipRateLimitError = await rateLimit(request, {
+      max: 5,
+      windowSeconds: 15 * 60,
+    });
+    if (ipRateLimitError) return ipRateLimitError;
+
     const body = await request.json();
     const { name, email } = signupSchema.parse(body);
+
+    // Rate limit: 3 signups per email per day
+    const emailRateLimitError = await rateLimit(request, {
+      max: 3,
+      windowSeconds: 24 * 60 * 60,
+      keyGenerator: async () => `email:${email.toLowerCase()}`,
+    });
+    if (emailRateLimitError) return emailRateLimitError;
 
     await connectDB();
 
