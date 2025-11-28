@@ -41,11 +41,13 @@ This project adheres to a Code of Conduct. By participating, you are expected to
 ### Installation
 
 1. Install dependencies:
+
    ```bash
    npm install
    ```
 
 2. Copy the environment file:
+
    ```bash
    cp .env.example .env
    ```
@@ -76,6 +78,7 @@ git checkout -b fix/bug-description
 ```
 
 Branch naming conventions:
+
 - `feature/` - New features
 - `fix/` - Bug fixes
 - `docs/` - Documentation changes
@@ -104,6 +107,7 @@ git commit -m "Fix email verification link expiration bug"
 ```
 
 Good commit messages:
+
 - Use present tense ("Add feature" not "Added feature")
 - Be specific and descriptive
 - Reference issues when applicable (#123)
@@ -158,18 +162,21 @@ We use Prettier for consistent code formatting. The formatter runs automatically
 ## Pull Request Process
 
 1. **Update your branch** with latest upstream changes:
+
    ```bash
    git fetch upstream
    git rebase upstream/main
    ```
 
 2. **Run all checks** before submitting:
+
    ```bash
    npm run check
    npm run build
    ```
 
 3. **Push your branch** to your fork:
+
    ```bash
    git push origin feature/your-feature-name
    ```
@@ -259,6 +266,7 @@ Use the feature request template and include:
 ## Recognition
 
 Contributors will be recognized in:
+
 - GitHub contributors list
 - Release notes (for significant contributions)
 - Security hall of fame (for security researchers, with permission)

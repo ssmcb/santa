@@ -7,6 +7,7 @@ If you discover a security vulnerability in this project, please report it priva
 Please report security vulnerabilities by emailing the maintainer directly or using GitHub's private vulnerability reporting feature.
 
 Response timeline:
+
 - Initial response: Within 48 hours
 - Status update: Within 7 days
 - Fix timeline: Depends on severity and complexity
@@ -22,22 +23,26 @@ Response timeline:
 This application implements multiple security layers:
 
 ### CSRF Protection
+
 - CSRF tokens on all state-changing requests (POST, PUT, DELETE, PATCH)
 - Timing-safe token comparison
 - Per-session token generation
 
 ### Session Security
+
 - Encrypted session management using iron-session
 - HttpOnly cookies to prevent XSS attacks
 - SameSite cookie attribute set to `lax`
 - Secure flag in production (HTTPS only)
 
 ### Input Validation
+
 - Zod schema validation on all API endpoints
 - Type-safe request/response handling
 - Sanitization of user inputs
 
 ### Communication Security
+
 - Security headers configured:
   - X-Frame-Options: DENY
   - X-Content-Type-Options: nosniff
@@ -46,6 +51,7 @@ This application implements multiple security layers:
 - HTTPS required in production
 
 ### Email Security
+
 - AWS SES webhook authentication
 - SNS signature verification
 - Rate limiting on email operations
@@ -79,6 +85,7 @@ Keep these secrets secure and never commit them to version control:
 ### AWS IAM Permissions
 
 The application requires minimal AWS permissions:
+
 - `ses:SendEmail` - Send emails via SES
 - `ses:SendRawEmail` - Send templated emails
 
@@ -89,6 +96,7 @@ Never use AWS root credentials. Create a dedicated IAM user with minimal permiss
 Security updates will be released as patch versions (e.g., 1.0.1, 1.0.2) and will be clearly marked in the release notes.
 
 To stay informed about security updates:
+
 - Watch this repository for releases
 - Enable GitHub security alerts
 - Monitor Dependabot alerts
@@ -96,17 +104,21 @@ To stay informed about security updates:
 ## Known Security Considerations
 
 ### Session Management
+
 - Sessions are stored in encrypted cookies
 - Default session lifetime is configurable
 - Sessions are invalidated on logout
 
 ### Email Verification
+
 - Email verification required for account activation
 - Links expire after a set time period
 - One-time use verification tokens
 
 ### Rate Limiting
+
 Consider implementing rate limiting for:
+
 - Login attempts
 - Email sending
 - API endpoints
