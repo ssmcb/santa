@@ -130,7 +130,7 @@ async function processSESNotification(notification: SESNotification): Promise<vo
         }
       );
 
-      console.log(
+      console.info(
         `Updated ${result.modifiedCount} participant(s) for ${email} to status: ${newStatus}`
       );
     } catch (error) {

@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     const rateLimitError = await rateLimit(request, {
       max: 10,
       windowSeconds: 60 * 60,
-      keyGenerator: async (req) => {
+      keyGenerator: async (_req) => {
         const session = await getSession();
         return session.participantId ? `user:${session.participantId}` : null;
       },

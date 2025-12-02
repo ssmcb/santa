@@ -6,7 +6,7 @@ import { connectDB } from '@/lib/db/mongodb';
 import { sendEmail } from '@/lib/email';
 import { getVerificationEmailTemplate } from '@/lib/email/templates';
 import { validateCSRF } from '@/lib/middleware/csrf';
-import { rateLimit, emailKeyGenerator } from '@/lib/middleware/rateLimit';
+import { rateLimit } from '@/lib/middleware/rateLimit';
 import { generateVerificationCode, getCodeExpiration } from '@/lib/utils/verification';
 
 const signupSchema = z.object({
