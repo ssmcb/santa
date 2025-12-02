@@ -16,7 +16,7 @@ export default async function HomePage({ params }: HomePageProps) {
   const session = await getSession();
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-zinc-950">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-zinc-50 dark:bg-zinc-950">
       <div className="flex flex-col items-center gap-8 text-center p-8">
         <h1 className="text-4xl font-bold text-zinc-900 dark:text-zinc-50 flex items-center gap-3">
           <Gift className="w-10 h-10" />
@@ -29,6 +29,17 @@ export default async function HomePage({ params }: HomePageProps) {
           <Button size="lg">{session.isLoggedIn ? tCommon('dashboard') : t('getStarted')}</Button>
         </Link>
       </div>
+      <footer className="absolute bottom-4 text-center text-xs text-zinc-500 dark:text-zinc-600">
+        Built with ❤️ by the community.{' '}
+        <a
+          href="https://buymeacoffee.com/smapps"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline hover:text-zinc-700 dark:hover:text-zinc-400 transition-colors"
+        >
+          Support this project
+        </a>
+      </footer>
     </div>
   );
 }

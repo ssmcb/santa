@@ -155,11 +155,13 @@ AWS SES is a cost-effective solution, especially for high volume. However, it re
 **Setup Steps:**
 
 1. **Set the email provider** in `.env.local`:
+
    ```bash
    EMAIL_PROVIDER=ses
    ```
 
 2. **Configure AWS credentials**:
+
    ```bash
    AWS_ACCESS_KEY_ID=your-aws-access-key-id
    AWS_SECRET_ACCESS_KEY=your-aws-secret-access-key
@@ -174,11 +176,13 @@ AWS SES is a cost-effective solution, especially for high volume. However, it re
    - Requesting production access (to send to non-verified emails)
 
 **Pros:**
+
 - Very cost-effective at scale ($0.10 per 1,000 emails)
 - High sending limits in production mode
 - Optional delivery tracking with SQS/SNS
 
 **Cons:**
+
 - Initial sandbox mode (can only send to verified emails)
 - Requires AWS account and some setup
 - Need to request production access
@@ -196,6 +200,7 @@ Resend is a modern email API that's easier to set up and great for small to medi
 3. **Verify your domain** (or use Resend's test domain for development)
 
 4. **Set the email provider** in `.env.local`:
+
    ```bash
    EMAIL_PROVIDER=resend
    ```
@@ -207,12 +212,14 @@ Resend is a modern email API that's easier to set up and great for small to medi
    ```
 
 **Pros:**
+
 - Quick and easy setup (5 minutes)
 - No sandbox mode restrictions
 - Modern developer experience
 - Great documentation
 
 **Cons:**
+
 - More expensive at high volumes (100 emails/day free, then $20/month for 50k emails)
 - Lower sending limits compared to SES production mode
 
@@ -254,12 +261,14 @@ If you're using AWS SES, you can optionally enable email delivery status trackin
 ### Environment Variables for Production
 
 **Required for all deployments:**
+
 - `MONGODB_URI`
 - `SESSION_SECRET`
 - `EMAIL_PROVIDER` (either `ses` or `resend`)
 - `NEXT_PUBLIC_APP_URL`
 
 **If using AWS SES (`EMAIL_PROVIDER=ses`):**
+
 - `AWS_ACCESS_KEY_ID`
 - `AWS_SECRET_ACCESS_KEY`
 - `AWS_REGION`
@@ -268,6 +277,7 @@ If you're using AWS SES, you can optionally enable email delivery status trackin
 - `WEBHOOK_SECRET` (optional, for SES notifications)
 
 **If using Resend (`EMAIL_PROVIDER=resend`):**
+
 - `RESEND_API_KEY`
 - `RESEND_SENDER_EMAIL`
 
@@ -303,17 +313,20 @@ The app can be deployed to any platform supporting Next.js:
 ### Emails Not Sending
 
 **For AWS SES:**
+
 - Verify sender email in AWS SES Console
 - Check if SES is in sandbox mode (can only send to verified emails)
 - Request production access if needed
 - Check AWS credentials are correct
 
 **For Resend:**
+
 - Verify sender email/domain in Resend dashboard
 - Check API key is correct and active
 - Verify you haven't exceeded your plan's sending limits
 
 **For both providers:**
+
 - Check `EMAIL_PROVIDER` environment variable is set correctly
 - Verify email provider credentials match the selected provider
 - Check application logs for error messages
@@ -407,6 +420,14 @@ For more details, see [CONTRIBUTING.md](./CONTRIBUTING.md).
 - **Bug Reports**: Use the [bug report template](.github/ISSUE_TEMPLATE/bug_report.md)
 - **Feature Requests**: Use the [feature request template](.github/ISSUE_TEMPLATE/feature_request.md)
 - **Security Issues**: See [SECURITY.md](./SECURITY.md) for responsible disclosure
+
+## 💖 Support This Project
+
+If this app made your Secret Santa easier, consider supporting its development:
+
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-FFDD00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/smapps)
+
+Your support helps cover hosting costs and keeps this project maintained and free for everyone.
 
 ## 📄 License
 

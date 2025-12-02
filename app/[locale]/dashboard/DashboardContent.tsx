@@ -1,12 +1,13 @@
 'use client';
 
 import React from 'react';
-import { useTranslations } from 'next-intl';
+import { MapPin, DollarSign, Users, Gift } from 'lucide-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { MapPin, DollarSign, Users, Gift } from 'lucide-react';
 
 type Group = {
   id: string;
@@ -30,7 +31,7 @@ export const DashboardContent = React.memo(
     const t = useTranslations('groups');
 
     return (
-      <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-4 md:p-8">
+      <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-4 md:p-8 pb-16">
         <div className="max-w-6xl mx-auto space-y-6">
           {/* Header */}
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -124,6 +125,21 @@ export const DashboardContent = React.memo(
             </Card>
           )}
         </div>
+
+        {/* Footer */}
+        <footer className="fixed bottom-0 left-0 right-0 bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-800 py-3">
+          <div className="max-w-6xl mx-auto px-4 text-center text-xs text-zinc-500 dark:text-zinc-600">
+            Built with ❤️ by the community.{' '}
+            <a
+              href="https://buymeacoffee.com/smapps"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-zinc-700 dark:hover:text-zinc-400 transition-colors"
+            >
+              Support this project
+            </a>
+          </div>
+        </footer>
       </div>
     );
   }

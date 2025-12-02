@@ -20,9 +20,7 @@ function getEmailProvider(): EmailProvider {
       emailProvider = new SESProvider();
       break;
     default:
-      throw new Error(
-        `Invalid EMAIL_PROVIDER: ${provider}. Must be either "ses" or "resend"`
-      );
+      throw new Error(`Invalid EMAIL_PROVIDER: ${provider}. Must be either "ses" or "resend"`);
   }
 
   return emailProvider;
