@@ -1,11 +1,14 @@
 # 🎅 Secret Santa App
 
+[![CI](https://github.com/ssmcb/santa/workflows/CI/badge.svg)](https://github.com/ssmcb/santa/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-green)](https://www.mongodb.com/)
 
 A modern, full-stack Secret Santa application built with Next.js 16, supporting multiple languages and automated email notifications.
+
+🔗 **[Live Demo](https://secretsantaapp.vercel.app)**
 
 ## ✨ Features
 
