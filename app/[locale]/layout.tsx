@@ -1,11 +1,13 @@
-import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
+import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
-import { notFound } from 'next/navigation';
+
 import { locales } from '@/i18n';
-import { getSession } from '@/lib/session';
 import { Navigation } from '@/components/Navigation';
+import { getSession } from '@/lib/session';
+
+import type { Metadata } from 'next';
 import '../globals.css';
 
 const geistSans = Geist({

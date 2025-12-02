@@ -6,7 +6,7 @@ import { getSession } from '@/lib/session';
 import { validateCSRF } from '@/lib/middleware/csrf';
 import { rateLimit } from '@/lib/middleware/rateLimit';
 import { runSecretSantaLottery, validateLotteryAssignments } from '@/lib/utils/lottery';
-import { sendEmail } from '@/lib/email/ses';
+import { sendEmail } from '@/lib/email';
 import { getAssignmentEmailTemplate } from '@/lib/email/templates';
 import { z } from 'zod';
 
@@ -125,7 +125,7 @@ export async function POST(request: NextRequest) {
 
     // Send assignment emails to all participants
     const emailPromises: Promise<
-      { success: boolean; messageId: string | undefined } | ParticipantDocument | null
+      { success: boolean; messageId?: string } | ParticipantDocument | null
     >[] = [];
 
     for (const [giverId, recipientId] of assignments) {

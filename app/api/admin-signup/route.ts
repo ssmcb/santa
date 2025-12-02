@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { connectDB } from '@/lib/db/mongodb';
+import { z } from 'zod';
+
 import { Participant } from '@/lib/db/models/Participant';
-import { generateVerificationCode, getCodeExpiration } from '@/lib/utils/verification';
-import { sendEmail } from '@/lib/email/ses';
+import { connectDB } from '@/lib/db/mongodb';
+import { sendEmail } from '@/lib/email';
 import { getVerificationEmailTemplate } from '@/lib/email/templates';
 import { validateCSRF } from '@/lib/middleware/csrf';
 import { rateLimit, emailKeyGenerator } from '@/lib/middleware/rateLimit';
-import { z } from 'zod';
+import { generateVerificationCode, getCodeExpiration } from '@/lib/utils/verification';
 
 const signupSchema = z.object({
   name: z.string().optional(),
@@ -98,7 +99,7 @@ export async function POST(request: NextRequest) {
     // Create a participant record (no group yet - they'll create one after verification)
     const newParticipant = await Participant.create({
       group_id: null,
-      name: name || '',
+      name: name && name.trim().length > 0 ? name : email.split('@')[0],
       email: email.toLowerCase(),
       verification_code: verificationCode,
       code_expires_at: codeExpiresAt,

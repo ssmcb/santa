@@ -1,15 +1,15 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
 import { z } from 'zod';
-import { useRouter } from 'next/navigation';
+
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useCSRF } from '@/lib/hooks/useCSRF';
 
 const verifySchema = z.object({
@@ -28,7 +28,6 @@ type VerifyFormProps = {
 export const VerifyForm = React.memo(({ locale, initialEmail, initialCode }: VerifyFormProps) => {
   const t = useTranslations('auth');
   const tCommon = useTranslations('common');
-  const router = useRouter();
   const { token: csrfToken } = useCSRF();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -82,19 +81,21 @@ export const VerifyForm = React.memo(({ locale, initialEmail, initialCode }: Ver
 
         setSuccess(tCommon('success'));
 
-        // Redirect to appropriate dashboard
-        if (result.groupId) {
-          router.push(`/${locale}/group/${result.groupId}/dashboard`);
-        } else {
-          router.push(`/${locale}/dashboard`);
-        }
+        // Use a small delay to ensure session is persisted, then do a full page navigation
+        // This ensures the server-side layout will fetch the updated session
+        setTimeout(() => {
+          const targetUrl = result.groupId
+            ? `/${locale}/group/${result.groupId}/dashboard`
+            : `/${locale}/dashboard`;
+          window.location.href = targetUrl;
+        }, 100);
       } catch (err) {
         setError(err instanceof Error ? err.message : t('invalidCode'));
       } finally {
         setIsSubmitting(false);
       }
     },
-    [csrfToken, locale, router, t, tCommon]
+    [csrfToken, locale, t, tCommon]
   );
 
   // Auto-submit if code is provided in URL

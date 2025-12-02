@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { connectDB } from '@/lib/db/mongodb';
+import { z } from 'zod';
+
 import { Group } from '@/lib/db/models/Group';
 import { Participant } from '@/lib/db/models/Participant';
-import { generateVerificationCode, getCodeExpiration } from '@/lib/utils/verification';
-import { sendEmail } from '@/lib/email/ses';
+import { connectDB } from '@/lib/db/mongodb';
+import { sendEmail } from '@/lib/email';
 import { getVerificationEmailTemplate } from '@/lib/email/templates';
 import { validateCSRF } from '@/lib/middleware/csrf';
 import { rateLimit } from '@/lib/middleware/rateLimit';
-import { z } from 'zod';
+import { generateVerificationCode, getCodeExpiration } from '@/lib/utils/verification';
 
 const joinGroupSchema = z.object({
   name: z.string().min(1),

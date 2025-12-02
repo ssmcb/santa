@@ -5,7 +5,7 @@ import { Participant } from '@/lib/db/models/Participant';
 import { getSession } from '@/lib/session';
 import { validateCSRF } from '@/lib/middleware/csrf';
 import { rateLimit } from '@/lib/middleware/rateLimit';
-import { sendEmail } from '@/lib/email/ses';
+import { sendEmail } from '@/lib/email';
 import { z } from 'zod';
 
 const sendInvitationSchema = z.object({

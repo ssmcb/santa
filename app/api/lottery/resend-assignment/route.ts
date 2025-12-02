@@ -4,7 +4,7 @@ import { Group } from '@/lib/db/models/Group';
 import { Participant } from '@/lib/db/models/Participant';
 import { getSession } from '@/lib/session';
 import { validateCSRF } from '@/lib/middleware/csrf';
-import { sendEmail } from '@/lib/email/ses';
+import { sendEmail } from '@/lib/email';
 import { getAssignmentEmailTemplate } from '@/lib/email/templates';
 import { z } from 'zod';
 

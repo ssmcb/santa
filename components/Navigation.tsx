@@ -1,12 +1,13 @@
 'use client';
 
 import { memo, useCallback, useState } from 'react';
+import { Gift } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Button } from '@/components/ui/button';
+
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
-import { Gift } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useCSRF } from '@/lib/hooks/useCSRF';
 
 type NavigationProps = {

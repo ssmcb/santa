@@ -1,15 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { connectDB } from '@/lib/db/mongodb';
+
 import { Participant } from '@/lib/db/models/Participant';
+import { connectDB } from '@/lib/db/mongodb';
+import { sendEmail } from '@/lib/email';
+import { getVerificationEmailTemplate } from '@/lib/email/templates';
+import { validateCSRF } from '@/lib/middleware/csrf';
 import {
   generateVerificationCode,
   getCodeExpiration,
   canResendCode,
   getRemainingCooldown,
 } from '@/lib/utils/verification';
-import { sendEmail } from '@/lib/email/ses';
-import { getVerificationEmailTemplate } from '@/lib/email/templates';
-import { validateCSRF } from '@/lib/middleware/csrf';
 
 export async function POST(request: NextRequest) {
   try {

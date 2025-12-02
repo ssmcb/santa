@@ -24,7 +24,7 @@ A modern, full-stack Secret Santa application built with Next.js 16, supporting 
 
 - Node.js 18+ and npm
 - MongoDB instance (local or cloud)
-- AWS account with SES configured
+- Email provider account (AWS SES or Resend)
 
 ### Installation
 
@@ -43,9 +43,8 @@ A modern, full-stack Secret Santa application built with Next.js 16, supporting 
    Edit `.env.local` and fill in:
    - `MONGODB_URI`: Your MongoDB connection string
    - `SESSION_SECRET`: Random 32+ character string
-   - `AWS_ACCESS_KEY_ID`: Your AWS access key
-   - `AWS_SECRET_ACCESS_KEY`: Your AWS secret key
-   - `AWS_SES_SENDER_EMAIL`: Verified email in SES
+   - `EMAIL_PROVIDER`: Either `ses` or `resend` (default: `ses`)
+   - Email provider credentials (see [Email Configuration](#email-configuration) below)
    - `NEXT_PUBLIC_APP_URL`: Your app URL
 
 3. **Run the development server:**
@@ -89,7 +88,7 @@ A modern, full-stack Secret Santa application built with Next.js 16, supporting 
 - **Styling**: Tailwind CSS 4 + Shadcn UI
 - **Database**: MongoDB + Mongoose
 - **Authentication**: iron-session (encrypted cookies)
-- **Email**: AWS SES
+- **Email**: AWS SES or Resend
 - **i18n**: next-intl
 - **Form Validation**: react-hook-form + Zod
 
@@ -145,9 +144,81 @@ MONGODB_URI=mongodb://localhost:27017/secretsanta
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/secretsanta
 ```
 
-### AWS SES
+### Email Configuration
 
-See [AWS Setup Guide](./documentation/aws-setup.md) for detailed instructions.
+The app supports two email providers: **AWS SES** and **Resend**. Choose the one that best fits your needs.
+
+#### Option 1: AWS SES (Default)
+
+AWS SES is a cost-effective solution, especially for high volume. However, it requires AWS account setup and initial sandbox mode limits.
+
+**Setup Steps:**
+
+1. **Set the email provider** in `.env.local`:
+   ```bash
+   EMAIL_PROVIDER=ses
+   ```
+
+2. **Configure AWS credentials**:
+   ```bash
+   AWS_ACCESS_KEY_ID=your-aws-access-key-id
+   AWS_SECRET_ACCESS_KEY=your-aws-secret-access-key
+   AWS_REGION=us-east-1
+   AWS_SES_SENDER_EMAIL=noreply@yourdomain.com
+   ```
+
+3. **Follow the [AWS Setup Guide](./documentation/aws-setup.md)** for detailed instructions on:
+   - Creating an AWS account
+   - Setting up SES
+   - Verifying your sender email
+   - Requesting production access (to send to non-verified emails)
+
+**Pros:**
+- Very cost-effective at scale ($0.10 per 1,000 emails)
+- High sending limits in production mode
+- Optional delivery tracking with SQS/SNS
+
+**Cons:**
+- Initial sandbox mode (can only send to verified emails)
+- Requires AWS account and some setup
+- Need to request production access
+
+#### Option 2: Resend (Recommended for Quick Start)
+
+Resend is a modern email API that's easier to set up and great for small to medium volumes.
+
+**Setup Steps:**
+
+1. **Create a Resend account** at [https://resend.com](https://resend.com)
+
+2. **Get your API key** from the Resend dashboard
+
+3. **Verify your domain** (or use Resend's test domain for development)
+
+4. **Set the email provider** in `.env.local`:
+   ```bash
+   EMAIL_PROVIDER=resend
+   ```
+
+5. **Configure Resend credentials**:
+   ```bash
+   RESEND_API_KEY=re_your_api_key_here
+   RESEND_SENDER_EMAIL=noreply@yourdomain.com
+   ```
+
+**Pros:**
+- Quick and easy setup (5 minutes)
+- No sandbox mode restrictions
+- Modern developer experience
+- Great documentation
+
+**Cons:**
+- More expensive at high volumes (100 emails/day free, then $20/month for 50k emails)
+- Lower sending limits compared to SES production mode
+
+#### Switching Between Providers
+
+You can switch between providers at any time by changing the `EMAIL_PROVIDER` environment variable and restarting your app. Make sure the corresponding credentials are configured.
 
 ### Session Secret
 
@@ -160,14 +231,16 @@ openssl rand -base64 32
 # Or use any random string generator
 ```
 
-## 📧 Email Delivery Tracking (Optional)
+## 📧 Email Delivery Tracking (Optional - AWS SES Only)
 
-To enable email delivery status tracking:
+If you're using AWS SES, you can optionally enable email delivery status tracking:
 
 1. Follow the [AWS Setup Guide](./documentation/aws-setup.md) Part 2
 2. Set up SNS topic and SQS queue
 3. Add `AWS_SES_NOTIFICATION_QUEUE_URL` to `.env.local`
 4. Configure a cron job to process notifications
+
+**Note:** Delivery tracking is only available with AWS SES. Resend does not currently support this feature in this application.
 
 ## 🚢 Deployment
 
@@ -180,17 +253,23 @@ To enable email delivery status tracking:
 
 ### Environment Variables for Production
 
-Make sure to set these in your deployment platform:
-
+**Required for all deployments:**
 - `MONGODB_URI`
 - `SESSION_SECRET`
+- `EMAIL_PROVIDER` (either `ses` or `resend`)
+- `NEXT_PUBLIC_APP_URL`
+
+**If using AWS SES (`EMAIL_PROVIDER=ses`):**
 - `AWS_ACCESS_KEY_ID`
 - `AWS_SECRET_ACCESS_KEY`
 - `AWS_REGION`
 - `AWS_SES_SENDER_EMAIL`
-- `NEXT_PUBLIC_APP_URL`
-- `AWS_SES_NOTIFICATION_QUEUE_URL` (optional)
-- `WEBHOOK_SECRET` (optional)
+- `AWS_SES_NOTIFICATION_QUEUE_URL` (optional, for delivery tracking)
+- `WEBHOOK_SECRET` (optional, for SES notifications)
+
+**If using Resend (`EMAIL_PROVIDER=resend`):**
+- `RESEND_API_KEY`
+- `RESEND_SENDER_EMAIL`
 
 ### Other Platforms
 
@@ -223,10 +302,21 @@ The app can be deployed to any platform supporting Next.js:
 
 ### Emails Not Sending
 
+**For AWS SES:**
 - Verify sender email in AWS SES Console
 - Check if SES is in sandbox mode (can only send to verified emails)
 - Request production access if needed
 - Check AWS credentials are correct
+
+**For Resend:**
+- Verify sender email/domain in Resend dashboard
+- Check API key is correct and active
+- Verify you haven't exceeded your plan's sending limits
+
+**For both providers:**
+- Check `EMAIL_PROVIDER` environment variable is set correctly
+- Verify email provider credentials match the selected provider
+- Check application logs for error messages
 
 ### Database Connection Issues
 
