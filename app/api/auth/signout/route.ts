@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSession } from '@/lib/session';
+
 import { validateCSRF } from '@/lib/middleware/csrf';
+import { getSession } from '@/lib/session';
 
 export async function POST(request: NextRequest) {
   try {

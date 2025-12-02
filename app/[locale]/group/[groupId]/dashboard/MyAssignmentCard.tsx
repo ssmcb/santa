@@ -1,8 +1,9 @@
 'use client';
 
 import { memo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Gift } from 'lucide-react';
+
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Participant } from '@/types/shared';
 
 type MyAssignmentCardProps = {

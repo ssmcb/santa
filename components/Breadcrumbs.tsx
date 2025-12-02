@@ -1,8 +1,8 @@
 'use client';
 
 import { Fragment, memo } from 'react';
-import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 
 type BreadcrumbItem = {
   label: string;

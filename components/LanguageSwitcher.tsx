@@ -1,7 +1,9 @@
 'use client';
 
 import React from 'react';
+import { Globe, Check } from 'lucide-react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
+
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -9,7 +11,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Globe, Check } from 'lucide-react';
 
 const languages = [
   { code: 'en', label: 'English', short: 'EN' },

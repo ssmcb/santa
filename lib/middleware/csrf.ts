@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSession } from '@/lib/session';
+
 import { validateCSRFToken } from '@/lib/csrf';
+import { getSession } from '@/lib/session';
 
 /**
  * CSRF Protection Middleware

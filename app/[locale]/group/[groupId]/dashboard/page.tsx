@@ -1,8 +1,10 @@
 import { redirect } from 'next/navigation';
+
 import { getAuthenticatedParticipant } from '@/lib/auth';
-import { connectDB } from '@/lib/db/mongodb';
 import { Group } from '@/lib/db/models/Group';
 import { Participant } from '@/lib/db/models/Participant';
+import { connectDB } from '@/lib/db/mongodb';
+
 import { GroupDashboard } from './GroupDashboard';
 
 type GroupDashboardPageProps = {

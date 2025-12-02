@@ -1,14 +1,16 @@
 'use client';
 
 import { useCallback, memo } from 'react';
+import { RotateCcw } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { RotateCcw } from 'lucide-react';
-import { ParticipantRow } from './ParticipantRow';
 import { Group, Participant } from '@/types/shared';
+
+import { ParticipantRow } from './ParticipantRow';
 
 export type ParticipantsSectionProps = {
   locale: string;

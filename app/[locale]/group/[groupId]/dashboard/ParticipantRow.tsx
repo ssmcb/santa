@@ -1,10 +1,11 @@
 'use client';
 
 import { memo, useState } from 'react';
+import { Trash2, Mail } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+
 import { Button } from '@/components/ui/button';
 import { TableCell, TableRow } from '@/components/ui/table';
-import { Trash2, Mail } from 'lucide-react';
 import { Participant } from '@/types/shared';
 
 export type ParticipantRowProps = {

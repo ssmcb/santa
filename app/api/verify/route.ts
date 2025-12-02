@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { connectDB } from '@/lib/db/mongodb';
+
 import { Participant } from '@/lib/db/models/Participant';
-import { getSession } from '@/lib/session';
+import { connectDB } from '@/lib/db/mongodb';
 import { validateCSRF } from '@/lib/middleware/csrf';
 import { rateLimit } from '@/lib/middleware/rateLimit';
+import { getSession } from '@/lib/session';
 import { isCodeExpired } from '@/lib/utils/verification';
 
 export async function POST(request: NextRequest) {

@@ -1,7 +1,8 @@
-import { getTranslations } from 'next-intl/server';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 import { Gift } from 'lucide-react';
+import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
+
+import { Button } from '@/components/ui/button';
 import { getSession } from '@/lib/session';
 
 type HomePageProps = {

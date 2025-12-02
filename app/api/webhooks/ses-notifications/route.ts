@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+
 import { processSQSMessages } from '@/lib/email/ses-notifications';
 
 /**

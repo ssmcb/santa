@@ -1,6 +1,7 @@
 import { SQSClient, ReceiveMessageCommand, DeleteMessageCommand } from '@aws-sdk/client-sqs';
-import { connectDB } from '@/lib/db/mongodb';
+
 import { Participant, EmailStatus } from '@/lib/db/models/Participant';
+import { connectDB } from '@/lib/db/mongodb';
 
 const sqsClient = new SQSClient({
   region: process.env.AWS_REGION || 'us-east-1',

@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { connectDB } from '@/lib/db/mongodb';
+import { z } from 'zod';
+
 import { Group } from '@/lib/db/models/Group';
 import { Participant } from '@/lib/db/models/Participant';
-import { getSession } from '@/lib/session';
+import { connectDB } from '@/lib/db/mongodb';
 import { validateCSRF } from '@/lib/middleware/csrf';
-import { z } from 'zod';
+import { getSession } from '@/lib/session';
 
 const removeParticipantSchema = z.object({
   groupId: z.string(),

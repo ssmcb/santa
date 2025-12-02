@@ -1,21 +1,23 @@
 'use client';
 
 import { memo, useState, useCallback, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import utc from 'dayjs/plugin/utc';
+import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+
 import 'dayjs/locale/pt-br';
 import 'dayjs/locale/en';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
-import { ParticipantsSection } from './ParticipantsSection';
+import { useCSRF } from '@/lib/hooks/useCSRF';
+import { Group, Participant } from '@/types/shared';
+
 import { GroupHeader } from './GroupHeader';
-import { MyAssignmentCard } from './MyAssignmentCard';
 import { InvitationSection } from './InvitationSection';
 import { LotteryDialogs } from './LotteryDialogs';
-import { Group, Participant } from '@/types/shared';
-import { useCSRF } from '@/lib/hooks/useCSRF';
+import { MyAssignmentCard } from './MyAssignmentCard';
+import { ParticipantsSection } from './ParticipantsSection';
 
 dayjs.extend(localizedFormat);
 dayjs.extend(utc);

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { connectDB } from '@/lib/db/mongodb';
+
 import { Participant } from '@/lib/db/models/Participant';
+import { connectDB } from '@/lib/db/mongodb';
 
 /**
  * GET /api/check-email

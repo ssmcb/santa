@@ -1,7 +1,8 @@
 import { getAuthenticatedParticipant } from '@/lib/auth';
-import { connectDB } from '@/lib/db/mongodb';
 import { Group } from '@/lib/db/models/Group';
 import { Participant } from '@/lib/db/models/Participant';
+import { connectDB } from '@/lib/db/mongodb';
+
 import { DashboardContent } from './DashboardContent';
 
 type DashboardPageProps = {

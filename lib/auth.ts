@@ -1,7 +1,8 @@
 import { redirect } from 'next/navigation';
-import { getSession } from './session';
-import { connectDB } from './db/mongodb';
+
 import { Participant } from './db/models/Participant';
+import { connectDB } from './db/mongodb';
+import { getSession } from './session';
 
 export async function requireAuth(locale: string) {
   const session = await getSession();

@@ -1,6 +1,8 @@
 import { redirect } from 'next/navigation';
-import { connectDB } from '@/lib/db/mongodb';
+
 import { Group } from '@/lib/db/models/Group';
+import { connectDB } from '@/lib/db/mongodb';
+
 import { JoinGroupForm } from './JoinGroupForm';
 
 type JoinPageProps = {

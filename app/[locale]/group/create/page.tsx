@@ -1,7 +1,9 @@
-import { getAuthenticatedParticipant } from '@/lib/auth';
 import { getTranslations } from 'next-intl/server';
-import { CreateGroupForm } from './CreateGroupForm';
+
 import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { getAuthenticatedParticipant } from '@/lib/auth';
+
+import { CreateGroupForm } from './CreateGroupForm';
 
 type CreateGroupPageProps = {
   params: Promise<{ locale: string }>;
