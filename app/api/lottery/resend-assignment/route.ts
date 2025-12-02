@@ -4,6 +4,7 @@ import { Group } from '@/lib/db/models/Group';
 import { Participant } from '@/lib/db/models/Participant';
 import { getSession } from '@/lib/session';
 import { validateCSRF } from '@/lib/middleware/csrf';
+import { rateLimit } from '@/lib/middleware/rateLimit';
 import { sendEmail } from '@/lib/email';
 import { getAssignmentEmailTemplate } from '@/lib/email/templates';
 import { z } from 'zod';
@@ -19,6 +20,17 @@ export async function POST(request: NextRequest) {
     // Validate CSRF token
     const csrfError = await validateCSRF(request);
     if (csrfError) return csrfError;
+
+    // Rate limit: 10 resend attempts per user per hour
+    const rateLimitError = await rateLimit(request, {
+      max: 10,
+      windowSeconds: 60 * 60,
+      keyGenerator: async () => {
+        const session = await getSession();
+        return session.participantId ? `user:${session.participantId}:resend` : null;
+      },
+    });
+    if (rateLimitError) return rateLimitError;
 
     // Check authentication
     const session = await getSession();

@@ -5,6 +5,7 @@ import { connectDB } from '@/lib/db/mongodb';
 import { sendEmail } from '@/lib/email';
 import { getVerificationEmailTemplate } from '@/lib/email/templates';
 import { validateCSRF } from '@/lib/middleware/csrf';
+import { rateLimit } from '@/lib/middleware/rateLimit';
 import {
   generateVerificationCode,
   getCodeExpiration,
@@ -17,6 +18,13 @@ export async function POST(request: NextRequest) {
     // Validate CSRF token
     const csrfError = await validateCSRF(request);
     if (csrfError) return csrfError;
+
+    // Rate limit: 5 resend attempts per IP per 15 minutes
+    const ipRateLimitError = await rateLimit(request, {
+      max: 5,
+      windowSeconds: 15 * 60,
+    });
+    if (ipRateLimitError) return ipRateLimitError;
 
     const { email } = await request.json();
 
