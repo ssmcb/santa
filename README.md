@@ -154,6 +154,7 @@ The app supports two email providers: **AWS SES** and **Resend**.
 #### AWS SES (Default)
 
 1. Set the email provider in `.env.local`:
+
    ```bash
    EMAIL_PROVIDER=ses
    AWS_ACCESS_KEY_ID=your-aws-access-key-id
