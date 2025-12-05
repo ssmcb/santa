@@ -1,0 +1,53 @@
+# Dependabot configuration for automated dependency updates
+# Documentation: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates
+
+version: 2
+updates:
+  # Enable version updates for npm
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "UTC"
+    # Group all minor and patch updates together to reduce PR noise
+    groups:
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+    # Allow up to 5 open pull requests for npm dependencies
+    open-pull-requests-limit: 5
+    # Add labels to PRs for easy filtering
+    labels:
+      - "dependencies"
+      - "npm"
+    # Automatically rebase PRs when base branch updates
+    rebase-strategy: "auto"
+    # Review and merge security updates automatically
+    # (requires GitHub Actions workflow for auto-merge)
+    versioning-strategy: "increase"
+    # Ignore major version updates for these packages to avoid breaking changes
+    ignore:
+      # Next.js major versions often require migration
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+      # React major versions require careful migration
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+
+  # Enable security updates for GitHub Actions (if you add any workflows)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "UTC"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    open-pull-requests-limit: 5

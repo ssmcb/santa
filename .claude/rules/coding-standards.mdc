@@ -1,0 +1,68 @@
+---
+description: Mandatory coding standards for all TypeScript/React code - performance optimization, code structure, and Next.js best practices
+globs:
+  - "**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+# Coding Standards (MANDATORY)
+
+## Performance Optimization
+
+- **Always use `React.memo`** for all functional components
+- **Always use `useMemo`** for computed values, object creation, and inline objects/arrays
+- **Always use `useCallback`** for all function definitions passed as props or dependencies
+- **Set displayName** for all memoized components for better debugging
+
+## Code Structure
+
+- **Always use `type` instead of `interface`** for all type definitions
+- **Never use `export default`** - always use named exports
+- **Reusable components**: create reusable whenever possible
+- **Import components** using named imports: `import { Button } from '@/components/ui/button'`
+- **Always use SWR** for data fetching instead of custom hooks or useState
+- **Always use react-hook-form** for form management with Controller components
+
+## Next.js Specific
+
+- Use **Server Components** by default unless interactivity is required
+- Use **Client Components** (`'use client'`) only when needed (hooks, event handlers, browser APIs)
+- Protect all routes with **middleware.ts** (authentication + i18n)
+- Use **Server Actions** for mutations when appropriate
+- Use **API Routes** for external integrations and webhooks
+
+## Secret Santa-Specific Patterns
+
+- **Session Management**: Use iron-session for encrypted cookie-based sessions
+- **Verification Flow**: Always validate verification codes before granting access
+- **Group Permissions**: Check if user is group owner before allowing certain operations
+- **Lottery Algorithm**: Ensure no participant draws themselves
+- **Real-time Updates**: Use router.refresh() after mutations to update Server Component data
+
+## Example
+
+```tsx
+type GroupCardProps = {
+  group: Group;
+  onSelect: (id: string) => void;
+  isSelected: boolean;
+};
+
+export const GroupCard = React.memo(({ group, onSelect, isSelected }: GroupCardProps) => {
+  const formattedDate = useMemo(() =>
+    new Date(group.date).toLocaleDateString(),
+    [group.date]
+  );
+  const handleClick = useCallback(() => onSelect(group._id), [onSelect, group._id]);
+
+  return (
+    <Card onClick={handleClick} className={isSelected ? 'border-blue-600' : ''}>
+      <CardHeader>
+        <CardTitle>{group.name}</CardTitle>
+        <p className="text-sm text-slate-500">{formattedDate}</p>
+      </CardHeader>
+    </Card>
+  );
+});
+GroupCard.displayName = "GroupCard";
+```
