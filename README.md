@@ -10,6 +10,8 @@ A modern, full-stack Secret Santa application built with Next.js 16, supporting 
 
 🔗 **[Live Demo](https://secretsantaapp.vercel.app)**
 
+![Secret Santa App Dashboard](./public/images/secret-santa-mock-image.png)
+
 ## ✨ Features
 
 - 🌍 **Bilingual Support**: Full internationalization (English & Portuguese)
