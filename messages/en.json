@@ -79,7 +79,20 @@
     "sent": "Sent",
     "bounced": "Bounced",
     "failed": "Failed",
-    "resendEmail": "Resend assignment email"
+    "resendEmail": "Resend assignment email",
+    "importTitle": "Import participants",
+    "importDescription": "Upload a CSV file with participant names and emails to add them to this group.",
+    "importFormat": "CSV format: Name,Email. Example:\n{example}",
+    "importPreview": "{count} participants ready to import",
+    "importButton": "Import CSV",
+    "importSuccess": "Added {added} participant(s). Skipped {skipped} existing email(s).",
+    "selectedFile": "Selected file: {file}",
+    "csvEmptyError": "Please choose a CSV file with at least one participant.",
+    "csvMissingFields": "Missing name or email on row {row}.",
+    "csvInvalidEmail": "Invalid email: {email}.",
+    "csvReadError": "Could not read the CSV file. Please try again.",
+    "importDisabledDrawn": "The lottery has already been drawn. Void it to import more participants.",
+    "csrfMissing": "Security token not available. Please refresh and try again."
   },
   "lottery": {
     "run": "Run Lottery",
