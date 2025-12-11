@@ -17,6 +17,7 @@ import { GroupHeader } from './GroupHeader';
 import { InvitationSection } from './InvitationSection';
 import { LotteryDialogs } from './LotteryDialogs';
 import { MyAssignmentCard } from './MyAssignmentCard';
+import { ParticipantsImportCard } from './ParticipantsImportCard';
 import { ParticipantsSection } from './ParticipantsSection';
 
 dayjs.extend(localizedFormat);
@@ -359,6 +360,9 @@ export const GroupDashboard = memo(
           {/* Owner-only features */}
           {isOwner && (
             <>
+              {/* Import participants */}
+              <ParticipantsImportCard group={group} />
+
               {/* Invitation Section */}
               <InvitationSection
                 inviteLink={inviteLink}

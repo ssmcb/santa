@@ -79,7 +79,20 @@
     "sent": "Enviado",
     "bounced": "Rebotado",
     "failed": "Fallido",
-    "resendEmail": "Reenviar correo de asignación"
+    "resendEmail": "Reenviar correo de asignación",
+    "importTitle": "Importar participantes",
+    "importDescription": "Sube un archivo CSV con los nombres y correos para agregarlos al grupo.",
+    "importFormat": "Formato CSV: Nombre,Correo. Ejemplo:\n{example}",
+    "importPreview": "{count} participante(s) listo(s) para importar",
+    "importButton": "Importar CSV",
+    "importSuccess": "Se agregaron {added} participante(s). Se omitieron {skipped} correo(s) existente(s).",
+    "selectedFile": "Archivo seleccionado: {file}",
+    "csvEmptyError": "Elige un CSV con al menos un participante.",
+    "csvMissingFields": "Falta nombre o correo en la fila {row}.",
+    "csvInvalidEmail": "Correo inválido: {email}.",
+    "csvReadError": "No se pudo leer el archivo CSV. Intenta de nuevo.",
+    "importDisabledDrawn": "El sorteo ya se realizó. Anúlalo para importar más participantes.",
+    "csrfMissing": "Token de seguridad no disponible. Actualiza e inténtalo otra vez."
   },
   "lottery": {
     "run": "Realizar sorteo",
