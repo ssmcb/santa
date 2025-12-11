@@ -22,17 +22,6 @@ export async function POST(request: NextRequest) {
     const csrfError = await validateCSRF(request);
     if (csrfError) return csrfError;
 
-    // Rate limit: 3 lottery runs per group per hour
-    const rateLimitError = await rateLimit(request, {
-      max: 3,
-      windowSeconds: 60 * 60,
-      keyGenerator: async (req) => {
-        const body = await req.json();
-        return body.groupId ? `group:${body.groupId}:lottery` : null;
-      },
-    });
-    if (rateLimitError) return rateLimitError;
-
     // Check authentication
     const session = await getSession();
     if (!session.isLoggedIn || !session.participantId) {
@@ -40,6 +29,16 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
+
+    // Rate limit: 3 lottery runs per group per hour
+    const rateLimitError = await rateLimit(request, {
+      max: 3,
+      windowSeconds: 60 * 60,
+      keyGenerator: async () =>
+        body.groupId ? `group:${body.groupId}:lottery` : null,
+    });
+    if (rateLimitError) return rateLimitError;
+
     const { groupId, locale: requestLocale } = runLotterySchema.parse(body);
 
     await connectDB();
