@@ -10,9 +10,10 @@
 
 import 'dotenv/config';
 import { nanoid } from 'nanoid';
-import { connectDB } from '../../lib/db/mongodb';
+
 import { Group } from '../../lib/db/models/Group';
 import { Participant } from '../../lib/db/models/Participant';
+import { connectDB } from '../../lib/db/mongodb';
 import { runSecretSantaLottery } from '../../lib/utils/lottery';
 
 // Mock participants data
@@ -34,20 +35,20 @@ const mockParticipants = [
 
 async function createMockGroup() {
   try {
-    console.log('🔌 Connecting to database...');
+    console.info('🔌 Connecting to database...');
     await connectDB();
 
     // Clean up any existing mock data
-    console.log('🧹 Cleaning up existing mock data...');
+    console.info('🧹 Cleaning up existing mock data...');
     const existingGroup = await Group.findOne({ owner_email: mockParticipants[0].email });
     if (existingGroup) {
       await Participant.deleteMany({ group_id: existingGroup._id });
       await Group.deleteOne({ _id: existingGroup._id });
-      console.log('✅ Cleaned up existing mock data');
+      console.info('✅ Cleaned up existing mock data');
     }
 
     // Create group
-    console.log('🎅 Creating Secret Santa group...');
+    console.info('🎅 Creating Secret Santa group...');
     const group = await Group.create({
       name: 'Office Christmas Party 2024',
       budget: '$30',
@@ -60,10 +61,10 @@ async function createMockGroup() {
       invitations_sent: [],
     });
 
-    console.log(`✅ Created group: ${group.name} (ID: ${group._id})`);
+    console.info(`✅ Created group: ${group.name} (ID: ${group._id})`);
 
     // Create participants
-    console.log('👥 Creating participants...');
+    console.info('👥 Creating participants...');
     const participantDocs = [];
 
     for (const mockParticipant of mockParticipants) {
@@ -80,7 +81,7 @@ async function createMockGroup() {
       });
 
       participantDocs.push(participant);
-      console.log(`  ✓ ${participant.name} (${participant.email})`);
+      console.info(`  ✓ ${participant.name} (${participant.email})`);
     }
 
     // Add participants to group
@@ -88,7 +89,7 @@ async function createMockGroup() {
     await group.save();
 
     // Run lottery
-    console.log('🎁 Running Secret Santa lottery...');
+    console.info('🎁 Running Secret Santa lottery...');
     const lotteryParticipants = participantDocs.map((p) => ({
       id: p._id.toString(),
       name: p.name,
@@ -106,27 +107,27 @@ async function createMockGroup() {
 
       const giver = participantDocs.find((p) => p._id.toString() === giverId);
       const recipient = participantDocs.find((p) => p._id.toString() === recipientId);
-      console.log(`  ✓ ${giver?.name} → ${recipient?.name}`);
+      console.info(`  ✓ ${giver?.name} → ${recipient?.name}`);
     }
 
     // Mark group as drawn
     group.is_drawn = true;
     await group.save();
 
-    console.log('\n🎉 Mock data created successfully!\n');
-    console.log('📋 Group Details:');
-    console.log(`   Name: ${group.name}`);
-    console.log(`   Date: ${group.date.toLocaleDateString()}`);
-    console.log(`   Budget: ${group.budget}`);
-    console.log(`   Place: ${group.place}`);
-    console.log(`   Invite ID: ${group.invite_id}`);
-    console.log(`   Owner: ${group.owner_email}`);
-    console.log(`   Participants: ${group.participants.length}`);
-    console.log(`   Lottery Status: ${group.is_drawn ? 'Completed ✓' : 'Pending'}`);
-    console.log('\n📸 Ready for screenshots!');
-    console.log(`\n🔗 Invitation link: http://localhost:3011/en/join/${group.invite_id}`);
-    console.log(`🔗 Owner dashboard: Sign in with ${mockParticipants[0].email}`);
-    console.log(`🔗 Participant view: Sign in with any other email above\n`);
+    console.info('\n🎉 Mock data created successfully!\n');
+    console.info('📋 Group Details:');
+    console.info(`   Name: ${group.name}`);
+    console.info(`   Date: ${group.date.toLocaleDateString()}`);
+    console.info(`   Budget: ${group.budget}`);
+    console.info(`   Place: ${group.place}`);
+    console.info(`   Invite ID: ${group.invite_id}`);
+    console.info(`   Owner: ${group.owner_email}`);
+    console.info(`   Participants: ${group.participants.length}`);
+    console.info(`   Lottery Status: ${group.is_drawn ? 'Completed ✓' : 'Pending'}`);
+    console.info('\n📸 Ready for screenshots!');
+    console.info(`\n🔗 Invitation link: http://localhost:3011/en/join/${group.invite_id}`);
+    console.info(`🔗 Owner dashboard: Sign in with ${mockParticipants[0].email}`);
+    console.info(`🔗 Participant view: Sign in with any other email above\n`);
 
     process.exit(0);
   } catch (error) {
