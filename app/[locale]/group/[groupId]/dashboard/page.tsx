@@ -29,6 +29,14 @@ export default async function GroupDashboardPage({ params }: GroupDashboardPageP
   // Fetch all participants with their details
   const participants = await Participant.find({ group_id: groupId });
 
+  // Participants are stored per group, so the session participant may belong to another group.
+  // Use this group's record (matched by email) so the drawn assignment shows up.
+  const groupParticipant = participants.find((p) => p.email === participant.email);
+  if (!groupParticipant && !isOwner) {
+    redirect(`/${locale}/dashboard`);
+  }
+  const currentParticipant = groupParticipant ?? participant;
+
   return (
     <GroupDashboard
       locale={locale}
@@ -58,10 +66,10 @@ export default async function GroupDashboardPage({ params }: GroupDashboardPageP
       }))}
       isOwner={isOwner}
       currentParticipant={{
-        id: participant._id.toString(),
-        name: participant.name,
-        email: participant.email,
-        recipientId: participant.recipient_id?.toString() || null,
+        id: currentParticipant._id.toString(),
+        name: currentParticipant.name,
+        email: currentParticipant.email,
+        recipientId: currentParticipant.recipient_id?.toString() || null,
       }}
     />
   );
